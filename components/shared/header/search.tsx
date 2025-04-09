@@ -18,6 +18,7 @@ const categories = [
   'Motor',
   'Transistor',
   'sensor module',
+  'Switch',
 ]
 
 export default async function Search() {

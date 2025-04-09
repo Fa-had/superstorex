@@ -1,7 +1,7 @@
 'use server'
 
 import { connectToDatabase } from '@/lib/db'
-import Product from '@/lib/db/models/product.model'
+import Product, { IProduct } from '@/lib/db/models/product.model'
 // import { revalidatePath } from 'next/cache'
 // import { formatError } from '../utils'
 // import { ProductInputSchema, ProductUpdateSchema } from '../validator'
@@ -152,22 +152,22 @@ export async function getProductsForCard({
   }[]
 }
 // GET PRODUCTS BY TAG
-// export async function getProductsByTag({
-//   tag,
-//   limit = 10,
-// }: {
-//   tag: string
-//   limit?: number
-// }) {
-//   await connectToDatabase()
-//   const products = await Product.find({
-//     tags: { $in: [tag] },
-//     isPublished: true,
-//   })
-//     .sort({ createdAt: 'desc' })
-//     .limit(limit)
-//   return JSON.parse(JSON.stringify(products)) as IProduct[]
-// }
+export async function getProductsByTag({
+  tag,
+  limit = 10,
+}: {
+  tag: string
+  limit?: number
+}) {
+  await connectToDatabase()
+  const products = await Product.find({
+    tags: { $in: [tag] },
+    isPublished: true,
+  })
+    .sort({ createdAt: 'desc' })
+    .limit(limit)
+  return JSON.parse(JSON.stringify(products)) as IProduct[]
+}
 
 // GET ONE PRODUCT BY SLUG
 // export async function getProductBySlug(slug: string) {
