@@ -10,6 +10,7 @@ import ProductGallery from '@/components/shared/product/product-gallery'
 import { Separator } from '@/components/ui/separator'
 import Rating from '@/components/shared/product/rating'
 import ProductSlider from '@/components/shared/product/product-slide'
+import Table from '@/components/shared/product/product-description-table'
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>
@@ -55,9 +56,14 @@ export default async function ProductDetails(props: {
 
           <div className='flex w-full flex-col gap-2 md:p-5 col-span-2'>
             <div className='flex flex-col gap-3'>
-              <p className='p-medium-16 rounded-full bg-grey-500/10   text-grey-500'>
-                Brand {product.brand} {product.category}
-              </p>
+              <div className='flex flex-row'>
+                <p className='text-sm text-gray-500'>{product.category}</p>
+                {!product.brand || product.brand === 'None' ? (
+                  <></>
+                ) : (
+                  <p className='text-sm text-gray-500'>{`/${product.brand}`}</p>
+                )}
+              </div>
               <h1 className='font-bold text-lg lg:text-xl'>{product.name}</h1>
               <div className='flex items-center gap-2'>
                 <span>{product.avgRating.toFixed(1)}</span>
@@ -85,10 +91,11 @@ export default async function ProductDetails(props: {
             </div>
             <Separator className='my-2' />
             <div className='flex flex-col gap-2'>
-              <p className='p-bold-20 text-grey-600'>Description</p>
-              <p className='p-medium-16 lg:p-regular-18'>
+              {/* <p className='p-bold-20 text-grey-600'>Description</p> */}
+              {/* <p className='p-medium-16 lg:p-regular-18'>
                 {product.description}
-              </p>
+              </p> */}
+              <Table description={product.description} />
             </div>
           </div>
           <div>

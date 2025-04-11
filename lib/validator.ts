@@ -33,7 +33,7 @@ export const ProductInputSchema = z.object({
   category: z.string().min(1, 'Category is required'),
   images: z.array(z.string()).min(1, 'Product must have at least one image'),
   brand: z.string().min(1, 'Brand is required'),
-  description: z.string().min(1, 'Description is required'),
+  description: z.array(z.string()).min(1, 'Description is required'), // Changed type (string -> [string])
   isPublished: z.boolean(),
   price: Price('Price'),
   listPrice: Price('List price'),
@@ -271,7 +271,7 @@ export const ProductInputSchema = z.object({
 //     name: z.string().min(1, 'Name is required'),
 //     logo: z.string().min(1, 'logo is required'),
 //     slogan: z.string().min(1, 'Slogan is required'),
-//     description: z.string().min(1, 'Description is required'),
+//     description: z.array(z.string()).min(1, 'Description is required'), //Changed type (string -> [string])
 //     keywords: z.string().min(1, 'Keywords is required'),
 //     url: z.string().min(1, 'Url is required'),
 //     email: z.string().min(1, 'Email is required'),
