@@ -381,7 +381,7 @@ const products: IProductInput[] = [
     name: 'Magnetic Switch',
     slug: toSlug('Magnetic Switch'),
     category: 'Switch',
-    images: ['/images/megnetic-switch.webp'],
+    images: ['/images/megnetic-switch-1.webp'],
     tags: ['new-arrival'],
     isPublished: true,
     price: 20,
