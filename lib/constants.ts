@@ -7,3 +7,4 @@ export const APP_DESCRIPTION =
   'value NULL, CHECK lib/constants.ts'
 
 export const PAGE_SIZE = Number(process.env.PAGE_SIZE || 9)
+export const DELIVERY_CHARGE = Number(process.env.DELIVERY_CHRGE || 50)

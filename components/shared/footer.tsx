@@ -141,11 +141,11 @@ export default function Footer() {
           <Link href='/page/help'>Help</Link>
         </div>
         <div className='flex justify-center text-sm'>
-          <p> © 2000-2025, {APP_NAME}, Inc.</p>
+          <p> © 2025, {APP_NAME} Inc.</p>
         </div>
-        <div className='mt-8 flex justify-center text-sm text-gray-400'>
+        {/* <div className='mt-8 flex justify-center text-sm text-gray-400'>
           123, Main Street
-        </div>
+        </div> */}
       </div>
     </footer>
   )
