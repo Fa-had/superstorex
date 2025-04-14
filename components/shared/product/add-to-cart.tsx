@@ -26,7 +26,7 @@ export default function AddToCart({
 
   const { addItem } = useCartStore()
 
-  //PROMPT: add quantity state
+  //add quantity state
   const [quantity, setQuantity] = useState(1)
 
   return minimal ? (
@@ -43,7 +43,7 @@ export default function AddToCart({
                   router.push('/cart')
                 }}
               >
-                {'Product.Go to Cart'}
+                {'Go to Cart'}
               </Button>
             ),
           })
@@ -52,7 +52,7 @@ export default function AddToCart({
         }
       }}
     >
-      {'Product.Add to Cart'}
+      Add to Cart
     </Button>
   ) : (
     <div className='w-full space-y-2'>

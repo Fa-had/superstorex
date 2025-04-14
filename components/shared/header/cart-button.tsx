@@ -5,6 +5,7 @@ import Link from 'next/link'
 import useIsMounted from '@/hooks/use-is-mounted'
 import { cn } from '@/lib/utils'
 import useCartStore from '@/hooks/use-cart-store'
+import useCartSidebar from '@/hooks/use-cart-sidebar'
 
 export default function CartButton() {
   const isMounted = useIsMounted()
@@ -12,6 +13,7 @@ export default function CartButton() {
     cart: { items },
   } = useCartStore()
   const cartItemsCount = items.reduce((a, c) => a + c.quantity, 0)
+  const isCartSidebarOpen = useCartSidebar()
   //   const showSidebar = useShowSidebar()
 
   //   const locale = useLocale()
@@ -31,7 +33,11 @@ export default function CartButton() {
           </span>
         )}
         <span className='font-bold'>Cart</span>
-
+        {isCartSidebarOpen && (
+          <div
+            className={`absolute w-2 h-2 right-[-17px] border-b-5 border-l-5 border-white transform rotate-45`}
+          ></div>
+        )}
         {/* {showSidebar && (
           <div
             className={`absolute top-[20px] ${

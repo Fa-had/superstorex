@@ -116,7 +116,7 @@ export default async function ProductDetails(props: {
                 ) : (
                   <div className='text-destructive text-xl'>Out of Stock</div>
                 )}
-
+                {/* comment out when website is ready */}
                 {/* {product.countInStock !== 0 && (
                   <div className='flex justify-center items-center'>
                     <AddToCart

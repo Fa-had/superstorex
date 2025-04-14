@@ -6,10 +6,9 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { IProduct } from '@/lib/db/models/product.model'
 
 import Rating from './rating'
-import { formatNumber, generateId, round2 } from '@/lib/utils'
+import { formatNumber } from '@/lib/utils'
 import ProductPrice from './product-price'
 import ImageHover from './image-hover'
-import AddToCart from './add-to-cart'
 
 const ProductCard = ({
   product,
@@ -74,7 +73,8 @@ const ProductCard = ({
   )
   const AddButton = () => (
     <div className='w-full text-center'>
-      <AddToCart
+      {/* Comment out when finished developing */}
+      {/* <AddToCart
         minimal
         item={{
           clientId: generateId(),
@@ -89,7 +89,7 @@ const ProductCard = ({
           quantity: 1,
           image: product.images[0],
         }}
-      />
+      /> */}
     </div>
   )
 
