@@ -46,7 +46,11 @@ const ProductCard = ({
   )
   const ProductDetails = () => (
     <div className='flex-1 space-y-2'>
-      <p className='font-bold'>{product.brand}</p>
+      {product.brand === 'None' ? (
+        <></>
+      ) : (
+        <p className='font-bold'>{product.brand}</p>
+      )}
       <Link
         href={`/product/${product.slug}`}
         className='overflow-hidden text-ellipsis'

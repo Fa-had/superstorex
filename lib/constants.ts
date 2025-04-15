@@ -8,3 +8,7 @@ export const APP_DESCRIPTION =
 
 export const PAGE_SIZE = Number(process.env.PAGE_SIZE || 9)
 export const DELIVERY_CHARGE = Number(process.env.DELIVERY_CHRGE || 50)
+
+export const APP_COPYRIGHT =
+  process.env.NEXT_PUBLIC_APP_COPYRIGHT ||
+  `Copyright © 2025 ${APP_NAME}, All rights reserved`
