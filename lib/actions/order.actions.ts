@@ -1,8 +1,8 @@
 'use server'
 
-import { OrderItem } from '@/types'
+import { DeliveryAddress, OrderItem } from '@/types'
 import { round2 } from '../utils'
-import { DELIVERY_CHARGE } from '../constants'
+import { AVAILABLE_DELIVERY_DATES } from '../constants'
 
 // CREATE
 // export const createOrder = async (clientSideCart: Cart) => {
@@ -267,44 +267,44 @@ import { DELIVERY_CHARGE } from '../constants'
 
 export const calcDeliveryDateAndPrice = async ({
   items,
-}: //   shippingAddress,
-//   deliveryDateIndex,
-{
+  deliveryAddress,
+  deliveryDateIndex,
+}: {
   deliveryDateIndex?: number
   items: OrderItem[]
-  //   shippingAddress?: ShippingAddress
+  deliveryAddress?: DeliveryAddress
 }) => {
   //   const { availableDeliveryDates } = await getSetting()
   const itemsPrice = round2(
     items.reduce((acc, item) => acc + item.price * item.quantity, 0)
   )
 
-  //   const deliveryDate =
-  //     availableDeliveryDates[
-  //       deliveryDateIndex === undefined
-  //         ? availableDeliveryDates.length - 1
-  //         : deliveryDateIndex
-  //     ]
-  //   const deliveryCharge =
-  //     !shippingAddress || !deliveryDate
-  //       ? undefined
-  //       : deliveryDate.freeShippingMinPrice > 0 &&
-  //           itemsPrice >= deliveryDate.freeShippingMinPrice
-  //         ? 0
-  //         : deliveryDate.deliveryCharge
+  const deliveryDate =
+    AVAILABLE_DELIVERY_DATES[
+      deliveryDateIndex === undefined
+        ? AVAILABLE_DELIVERY_DATES.length - 1
+        : deliveryDateIndex
+    ]
+  const deliveryCharge =
+    !deliveryAddress || !deliveryDate
+      ? undefined
+      : deliveryDate.freeDeliveryMinCharge > 0 &&
+        itemsPrice >= deliveryDate.freeDeliveryMinCharge
+      ? 0
+      : deliveryDate.deliveryCharge
 
-  const deliveryCharge = itemsPrice > DELIVERY_CHARGE ? 0 : 50
+  // const deliveryCharge = itemsPrice > DELIVERY_CHARGE ? 0 : 50
 
   //   const taxPrice = !shippingAddress ? undefined : round2(itemsPrice * 0.15)
   const totalPrice = round2(
     itemsPrice + (deliveryCharge ? round2(deliveryCharge) : 0)
   )
   return {
-    // availableDeliveryDates,
-    // deliveryDateIndex:
-    //   deliveryDateIndex === undefined
-    //     ? availableDeliveryDates.length - 1
-    //     : deliveryDateIndex,
+    AVAILABLE_DELIVERY_DATES,
+    deliveryDateIndex:
+      deliveryDateIndex === undefined
+        ? AVAILABLE_DELIVERY_DATES.length - 1
+        : deliveryDateIndex,
     itemsPrice,
     deliveryCharge,
     totalPrice,

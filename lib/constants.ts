@@ -12,3 +12,51 @@ export const DELIVERY_CHARGE = Number(process.env.DELIVERY_CHRGE || 50)
 export const APP_COPYRIGHT =
   process.env.NEXT_PUBLIC_APP_COPYRIGHT ||
   `Copyright © 2025 ${APP_NAME}, All rights reserved`
+
+export const AVAILABLE_PAYMENT_METHOD = [
+  {
+    name: 'Bikash',
+    commission: 0,
+    isDefault: false,
+  },
+  {
+    name: 'Rocket',
+    commission: 0,
+    isDefault: false,
+  },
+  {
+    name: 'Cash on Delivery',
+    commission: 0,
+    isDefault: false,
+  },
+]
+
+export const DEFAULT_PAYMENT_METHOD =
+  process.env.DEFAULT_PAYMENT_METHOD || 'Cash on Delivery'
+
+export const AVAILABLE_DELIVERY_DATES = [
+  {
+    name: 'Today',
+    daysToDelivery: 0,
+    deliveryCharge: 70,
+    freeDeliveryMinCharge: 0,
+  },
+  {
+    name: 'Tomorrow',
+    daysToDelivery: 1,
+    deliveryCharge: 40,
+    freeDeliveryMinCharge: 0,
+  },
+  {
+    name: 'Next 3-5 Days',
+    daysToDelivery: 5,
+    deliveryCharge: 20,
+    freeDeliveryMinCharge: 0,
+  },
+  {
+    name: 'Next 20 Days',
+    daysToDelivery: 20,
+    deliveryCharge: 0,
+    freeDeliveryMinCharge: 0,
+  },
+]

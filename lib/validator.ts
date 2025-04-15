@@ -80,7 +80,7 @@ export const CartSchema = z.object({
     .array(OrderItemSchema)
     .min(1, 'Order must contain at least one item'),
   itemsPrice: z.number(),
-  shippingPrice: z.optional(z.number()),
+  deliveryCharge: z.optional(z.number()),
   totalPrice: z.number(),
   paymentMethod: z.optional(z.string()),
   deliveryAddress: z.optional(DeliveryAddressSchema),
