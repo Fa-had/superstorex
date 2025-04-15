@@ -1,11 +1,6 @@
 import { z } from 'zod'
 import { formatNumberWithDecimal } from './utils'
 
-// Common
-// const MongoId = z
-//   .string()
-//   .regex(/^[0-9a-fA-F]{24}$/, { message: 'Invalid MongoDB ID' })
-
 const Price = (field: string) =>
   z.coerce
     .number()
@@ -13,19 +8,6 @@ const Price = (field: string) =>
       (value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimal(value)),
       `${field} must have exactly two decimal places (e.g., 49.99)`
     )
-
-// export const ReviewInputSchema = z.object({
-//   product: MongoId,
-//   user: MongoId,
-//   isVerifiedPurchase: z.boolean(),
-//   title: z.string().min(1, 'Title is required'),
-//   comment: z.string().min(1, 'Comment is required'),
-//   rating: z.coerce
-//     .number()
-//     .int()
-//     .min(1, 'Rating must be at least 1')
-//     .max(5, 'Rating must be at most 5'),
-// })
 
 export const ProductInputSchema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
@@ -61,10 +43,6 @@ export const ProductInputSchema = z.object({
     .int()
     .nonnegative('Number of sales must be a non-negative number'),
 })
-
-// export const ProductUpdateSchema = ProductInputSchema.extend({
-//   _id: z.string(),
-// })
 
 // Order Item
 export const OrderItemSchema = z.object({
@@ -102,7 +80,6 @@ export const CartSchema = z.object({
     .array(OrderItemSchema)
     .min(1, 'Order must contain at least one item'),
   itemsPrice: z.number(),
-  // taxPrice: z.optional(z.number()),
   shippingPrice: z.optional(z.number()),
   totalPrice: z.number(),
   paymentMethod: z.optional(z.string()),
@@ -119,13 +96,6 @@ const UserName = z
 const Email = z.string().min(1, 'Email is required').email('Email is invalid')
 const Password = z.string().min(3, 'Password must be at least 3 characters')
 const UserRole = z.string().min(1, 'role is required')
-
-// export const UserUpdateSchema = z.object({
-//   _id: MongoId,
-//   name: UserName,
-//   email: Email,
-//   role: UserRole,
-// })
 
 export const UserInputSchema = z.object({
   name: UserName,
@@ -148,4 +118,12 @@ export const UserInputSchema = z.object({
 export const UserSignInSchema = z.object({
   email: Email,
   password: Password,
+})
+
+export const UserSignUpSchema = UserSignInSchema.extend({
+  name: UserName,
+  confirmPassword: Password,
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ['confirmPassword'],
 })
