@@ -451,10 +451,19 @@ const users: IUserInput[] = [
     emailVerified: false,
   },
 ]
+const reviews = [
+  {
+    rating: 5,
+    title: "Couldn't ask for more!",
+    comment:
+      "Love this product! It's durable, stylish, and works great. Would buy again without hesitation.",
+  },
+]
 
 const data: Data = {
   users,
   products,
+  reviews,
   headerMenus: [
     {
       name: "Today's Deal",
