@@ -2,7 +2,7 @@
 
 import { Cart, DeliveryAddress, OrderItem } from '@/types'
 import { formatError, round2 } from '../utils'
-import { AVAILABLE_DELIVERY_DATES } from '../constants'
+import { AVAILABLE_DELIVERY_DATES, PAGE_SIZE } from '../constants'
 import { connectToDatabase } from '../db'
 import { auth } from '@/auth'
 import { OrderInputSchema } from '../validator'
@@ -190,7 +190,7 @@ export async function getMyOrders({
   // const {
   //   common: { pageSize },
   // } = await getSetting()
-  limit = limit || 1
+  limit = limit || PAGE_SIZE
   await connectToDatabase()
   const session = await auth()
   if (!session) {
