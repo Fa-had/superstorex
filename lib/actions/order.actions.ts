@@ -6,7 +6,18 @@ import { AVAILABLE_DELIVERY_DATES } from '../constants'
 import { connectToDatabase } from '../db'
 import { auth } from '@/auth'
 import { OrderInputSchema } from '../validator'
-import Order from '../db/models/order.model'
+import Order, { IOrder } from '../db/models/order.model'
+import { sendPurchaseReceipt } from '@/emails'
+import { createPayment, executePayment } from '../bkash'
+
+//Bkash creadential
+const bkashConfig = {
+  base_url: process.env.BKASH_BASE,
+  username: process.env.BKASH_USER_NAME,
+  password: process.env.BKASH_PASSWORD,
+  app_key: process.env.BKASH_API_KEY,
+  app_secret: process.env.BKASH_SECRET_KEY,
+}
 
 // CREATE
 export const createOrder = async (clientSideCart: Cart) => {
@@ -169,104 +180,120 @@ export const createOrderFromCart = async (
 //     totalPages: Math.ceil(ordersCount / limit),
 //   }
 // }
-// export async function getMyOrders({
-//   limit,
-//   page,
-// }: {
-//   limit?: number
-//   page: number
-// }) {
-//   const {
-//     common: { pageSize },
-//   } = await getSetting()
-//   limit = limit || pageSize
-//   await connectToDatabase()
-//   const session = await auth()
-//   if (!session) {
-//     throw new Error('User is not authenticated')
-//   }
-//   const skipAmount = (Number(page) - 1) * limit
-//   const orders = await Order.find({
-//     user: session?.user?.id,
-//   })
-//     .sort({ createdAt: 'desc' })
-//     .skip(skipAmount)
-//     .limit(limit)
-//   const ordersCount = await Order.countDocuments({ user: session?.user?.id })
+export async function getMyOrders({
+  limit,
+  page,
+}: {
+  limit?: number
+  page: number
+}) {
+  // const {
+  //   common: { pageSize },
+  // } = await getSetting()
+  limit = limit || 1
+  await connectToDatabase()
+  const session = await auth()
+  if (!session) {
+    throw new Error('User is not authenticated')
+  }
+  const skipAmount = (Number(page) - 1) * limit
+  const orders = await Order.find({
+    user: session?.user?.id,
+  })
+    .sort({ createdAt: 'desc' })
+    .skip(skipAmount)
+    .limit(limit)
+  const ordersCount = await Order.countDocuments({ user: session?.user?.id })
 
-//   return {
-//     data: JSON.parse(JSON.stringify(orders)),
-//     totalPages: Math.ceil(ordersCount / limit),
-//   }
-// }
-// export async function getOrderById(orderId: string): Promise<IOrder> {
-//   await connectToDatabase()
-//   const order = await Order.findById(orderId)
-//   return JSON.parse(JSON.stringify(order))
-// }
+  return {
+    data: JSON.parse(JSON.stringify(orders)),
+    totalPages: Math.ceil(ordersCount / limit),
+  }
+}
+export async function getOrderById(orderId: string): Promise<IOrder> {
+  await connectToDatabase()
+  const order = await Order.findById(orderId)
+  return JSON.parse(JSON.stringify(order))
+}
 
-// export async function createPayPalOrder(orderId: string) {
-//   await connectToDatabase()
-//   try {
-//     const order = await Order.findById(orderId)
-//     if (order) {
-//       const paypalOrder = await paypal.createOrder(order.totalPrice)
-//       order.paymentResult = {
-//         id: paypalOrder.id,
-//         email_address: '',
-//         status: '',
-//         pricePaid: '0',
-//       }
-//       await order.save()
-//       return {
-//         success: true,
-//         message: 'PayPal order created successfully',
-//         data: paypalOrder.id,
-//       }
-//     } else {
-//       throw new Error('Order not found')
-//     }
-//   } catch (err) {
-//     return { success: false, message: formatError(err) }
-//   }
-// }
+export async function createBkashOrder(orderId: string) {
+  await connectToDatabase()
 
-// export async function approvePayPalOrder(
-//   orderId: string,
-//   data: { orderID: string }
-// ) {
-//   await connectToDatabase()
-//   try {
-//     const order = await Order.findById(orderId).populate('user', 'email')
-//     if (!order) throw new Error('Order not found')
+  try {
+    const order = await Order.findById(orderId)
+    if (order) {
+      const myUrl = process.env.MAIN_URL
+      const paymentDetails = {
+        amount: order.totalPrice,
+        callbackURL: `${myUrl}/api/bkashCallback`,
+        orderID: orderId,
+        reference: '1',
+      }
+      const bkashOrder = await createPayment(bkashConfig, paymentDetails)
+      console.log('order.action: ', bkashOrder)
+      order.paymentResult = {
+        paymentID: bkashOrder.paymentID,
+        statusMessage: '',
+        customerMsisdn: '',
+        pricePaid: '0',
+        trxID: '',
+        paymentExecuteTime: '',
+      }
+      await order.save()
+      return {
+        success: true,
+        message: 'Bkash order created successfully',
+        url: bkashOrder.bkashURL,
+      }
+    } else {
+      throw new Error('Order not found')
+    }
+  } catch (err) {
+    return { success: false, message: formatError(err) }
+  }
+}
 
-//     const captureData = await paypal.capturePayment(data.orderID)
-//     if (
-//       !captureData ||
-//       captureData.id !== order.paymentResult?.id ||
-//       captureData.status !== 'COMPLETED'
-//     )
-//       throw new Error('Error in paypal payment')
-//     order.isPaid = true
-//     order.paidAt = new Date()
-//     order.paymentResult = {
-//       id: captureData.id,
-//       status: captureData.status,
-//       email_address: captureData.payer.email_address,
-//       pricePaid:
-//         captureData.purchase_units[0]?.payments?.captures[0]?.amount?.value,
-//     }
-//     await order.save()
-//     await sendPurchaseReceipt({ order })
-//     revalidatePath(`/account/orders/${orderId}`)
-//     return {
-//       success: true,
-//       message: 'Your order has been successfully paid by PayPal',
-//     }
-//   } catch (err) {
-//     return { success: false, message: formatError(err) }
-//   }
-// }
+export async function executeBkashOrder(
+  // orderId: string,
+  data: { orderID: string }
+) {
+  await connectToDatabase()
+  try {
+    // const order = await Order.findById(orderId).populate('user', 'email')
+    // if (!order) throw new Error('Order not found')
+
+    const captureData = await executePayment(bkashConfig, data.orderID)
+    console.log(captureData)
+    const orderId = captureData.merchantInvoiceNumber
+    const order = await Order.findById(orderId).populate('user', 'email')
+    if (!order) throw new Error('Order not found')
+    if (
+      !captureData ||
+      captureData.paymentID !== order.paymentResult?.paymentID ||
+      captureData.statusMessage !== 'Successful'
+    )
+      throw new Error('Error in bkash payment')
+    order.isPaid = true
+    order.paidAt = new Date()
+    order.paymentResult = {
+      paymentID: captureData.paymentID,
+      statusMessage: captureData.statusMessage,
+      customerMsisdn: captureData.customerMsisdn,
+      pricePaid: captureData.amount,
+      trxID: captureData.trxID,
+      paymentExecuteTime: captureData.paymentExecuteTime,
+    }
+    await order.save()
+    await sendPurchaseReceipt({ order })
+    return captureData
+    // {
+    //   success: true,
+    //   message: 'Your order has been successfully paid by Bkash',
+    // }
+  } catch (err) {
+    return { success: false, message: formatError(err) }
+  }
+}
 
 export const calcDeliveryDateAndPrice = async ({
   items,
@@ -292,9 +319,9 @@ export const calcDeliveryDateAndPrice = async ({
     !deliveryAddress || !deliveryDate
       ? undefined
       : deliveryDate.freeDeliveryMinCharge > 0 &&
-        itemsPrice >= deliveryDate.freeDeliveryMinCharge
-      ? 0
-      : deliveryDate.deliveryCharge
+          itemsPrice >= deliveryDate.freeDeliveryMinCharge
+        ? 0
+        : deliveryDate.deliveryCharge
 
   // const deliveryCharge = itemsPrice > DELIVERY_CHARGE ? 0 : 50
 

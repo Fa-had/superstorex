@@ -6,6 +6,12 @@ export const APP_DESCRIPTION =
   process.env.NEXT_PUBLIC_APP_DESCRIPTION ||
   'value NULL, CHECK lib/constants.ts'
 
+export const SERVER_URL =
+  process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+export const SENDER_NAME = process.env.SENDER_NAME || 'SuperStoreX Support'
+export const SENDER_EMAIL =
+  process.env.SENDER_EMAIL || 'superstorex.bd@gmail.com'
+
 export const PAGE_SIZE = Number(process.env.PAGE_SIZE || 9)
 export const DELIVERY_CHARGE = Number(process.env.DELIVERY_CHRGE || 50)
 
@@ -15,7 +21,7 @@ export const APP_COPYRIGHT =
 
 export const AVAILABLE_PAYMENT_METHOD = [
   {
-    name: 'Bikash',
+    name: 'Bkash',
     commission: 0,
     isDefault: false,
   },
@@ -25,7 +31,7 @@ export const AVAILABLE_PAYMENT_METHOD = [
     isDefault: false,
   },
   {
-    name: 'Cash on Delivery',
+    name: 'Cash On Delivery',
     commission: 0,
     isDefault: false,
   },

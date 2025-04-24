@@ -325,10 +325,10 @@ const CheckoutForm = () => {
                             name='division'
                             render={({ field }) => (
                               <FormItem className='w-full'>
-                                <FormLabel>Province</FormLabel>
+                                <FormLabel>Division</FormLabel>
                                 <FormControl>
                                   <Input
-                                    placeholder='Enter province'
+                                    placeholder='Enter division'
                                     {...field}
                                   />
                                 </FormControl>
@@ -424,6 +424,9 @@ const CheckoutForm = () => {
                       {AVAILABLE_PAYMENT_METHOD.map((pm) => (
                         <div key={pm.name} className='flex items-center py-1 '>
                           <RadioGroupItem
+                            disabled={
+                              pm.name === 'Bkash' || pm.name === 'Rocket'
+                            }
                             value={pm.name}
                             id={`payment-${pm.name}`}
                           />

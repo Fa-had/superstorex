@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 
 import { Cart, DeliveryAddress, OrderItem } from '@/types'
 import { calcDeliveryDateAndPrice } from '@/lib/actions/order.actions'
+import { toast } from 'sonner'
 
 const initialState: Cart = {
   items: [],
@@ -41,10 +42,12 @@ const useCartStore = create(
 
         if (existItem) {
           if (existItem.countInStock < quantity + existItem.quantity) {
+            toast.error('Not enough items in stock')
             throw new Error('Not enough items in stock')
           }
         } else {
           if (item.countInStock < item.quantity) {
+            toast.error('Not enough items in stock')
             throw new Error('Not enough items in stock')
           }
         }

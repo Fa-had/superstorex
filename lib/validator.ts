@@ -91,10 +91,12 @@ export const OrderInputSchema = z.object({
   paymentMethod: z.string().min(1, 'Payment method is required'),
   paymentResult: z
     .object({
-      id: z.string(),
-      status: z.string(),
-      email_address: z.string(),
+      paymentID: z.string(),
+      statusMessage: z.string(),
+      customerMsisdn: z.string(),
       pricePaid: z.string(),
+      trxID: z.string(),
+      paymentExecuteTime: z.string(),
     })
     .optional(),
   itemsPrice: Price('Items price'),
