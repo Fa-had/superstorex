@@ -12,6 +12,7 @@ export default function ClientProviders({
   const isCartSidebarOpen = useCartSidebar()
 
   return (
+    // <ThemeProvider attribute='class' defaultTheme='system'>
     <>
       {isCartSidebarOpen ? (
         <div className='flex min-h-screen'>
@@ -23,5 +24,6 @@ export default function ClientProviders({
       )}
       <Toaster />
     </>
+    // </ThemeProvider>
   )
 }

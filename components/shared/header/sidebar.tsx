@@ -11,12 +11,15 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
+import { auth } from '@/auth'
+import { SignOut } from '@/lib/actions/user.actions'
 
 export default async function Sidebar({
   categories,
 }: {
   categories: string[]
 }) {
+  const session = await auth()
   return (
     <Drawer direction={'left'}>
       <DrawerTrigger className='header-button flex items-center !p-2  '>
@@ -30,11 +33,11 @@ export default async function Sidebar({
             <DrawerHeader>
               <DrawerTitle className='flex items-center'>
                 <UserCircle className='h-6 w-6 mr-2' />
-                {/* {session ? (
+                {session ? (
                   <DrawerClose asChild>
                     <Link href='/account'>
                       <span className='text-lg font-semibold'>
-                        {t('Header.Hello')}, {session.user.name}
+                        Hello, {session.user.name}
                       </span>
                     </Link>
                   </DrawerClose>
@@ -42,11 +45,11 @@ export default async function Sidebar({
                   <DrawerClose asChild>
                     <Link href='/sign-in'>
                       <span className='text-lg font-semibold'>
-                        {t('Header.Hello')}, {t('Header.sign in')}
+                        Hello, sign in
                       </span>
                     </Link>
                   </DrawerClose>
-                )} */}
+                )}
               </DrawerTitle>
               <DrawerDescription></DrawerDescription>
             </DrawerHeader>
@@ -93,20 +96,20 @@ export default async function Sidebar({
                 Customer Service
               </Link>
             </DrawerClose>
-            {/* {session ? (
+            {session ? (
               <form action={SignOut} className='w-full'>
                 <Button
                   className='w-full justify-start item-button text-base'
                   variant='ghost'
                 >
-                  {t('Header.Sign out')}
+                  Sign out
                 </Button>
               </form>
             ) : (
               <Link href='/sign-in' className='item-button'>
-                {t('Header.Sign in')}
+                Sign in
               </Link>
-            )} */}
+            )}
           </div>
         </div>
       </DrawerContent>
