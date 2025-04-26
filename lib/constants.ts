@@ -38,7 +38,7 @@ export const AVAILABLE_PAYMENT_METHOD = [
 ]
 
 export const DEFAULT_PAYMENT_METHOD =
-  process.env.DEFAULT_PAYMENT_METHOD || 'Cash on Delivery'
+  process.env.DEFAULT_PAYMENT_METHOD || 'Cash On Delivery'
 
 export const AVAILABLE_DELIVERY_DATES = [
   {

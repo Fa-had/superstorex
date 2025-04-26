@@ -31,7 +31,7 @@ export const ProductInputSchema = z.object({
   category: z.string().min(1, 'Category is required'),
   images: z.array(z.string()).min(1, 'Product must have at least one image'),
   brand: z.string().min(1, 'Brand is required'),
-  description: z.array(z.string()).min(1, 'Description is required'), // Changed type (string -> [string])
+  description: z.string().min(1, 'Description is required'), // Changed type (string -> [string])
   isPublished: z.boolean(),
   price: Price('Price'),
   listPrice: Price('List price'),
@@ -58,6 +58,10 @@ export const ProductInputSchema = z.object({
     .number()
     .int()
     .nonnegative('Number of sales must be a non-negative number'),
+})
+
+export const ProductUpdateSchema = ProductInputSchema.extend({
+  _id: z.string(),
 })
 
 // Order Item
