@@ -30,10 +30,6 @@ export async function createPayment(
       }
     }
     const url = `${bkashConfig?.base_url}/tokenized/checkout/create`
-    console.log('Amount: ', amount)
-    console.log('callbackURL: ', callbackURL)
-    console.log('orderID: ', orderID)
-    console.log('Reference: ', reference)
 
     const response = await axios.post(
       url,

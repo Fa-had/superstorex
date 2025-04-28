@@ -4,6 +4,7 @@ import {
   OrderInputSchema,
   OrderItemSchema,
   ProductInputSchema,
+  ProductUpdateSchema,
   ReviewInputSchema,
   UserInputSchema,
   UserNameSchema,
@@ -23,6 +24,7 @@ export type IReviewDetails = IReviewInput & {
 }
 
 export type IProductInput = z.infer<typeof ProductInputSchema>
+export type IProductUpdate = z.infer<typeof ProductUpdateSchema>
 
 export type Data = {
   users: IUserInput[]
@@ -77,3 +79,14 @@ export type IUserInput = z.infer<typeof UserInputSchema>
 export type IUserSignIn = z.infer<typeof UserSignInSchema>
 export type IUserSignUp = z.infer<typeof UserSignUpSchema>
 export type IUserName = z.infer<typeof UserNameSchema>
+
+//image
+export type IImage = {
+  fileUrls: string[]
+  fileIds: string[]
+}
+//credential
+export type ICredential = {
+  client_email: string
+  private_key: string
+}

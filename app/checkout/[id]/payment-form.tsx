@@ -50,8 +50,7 @@ export default function OrderDetailsForm({
         router.push(res.url)
       }
     } catch (error) {
-      console.log(error)
-      alert('Something went wrong')
+      alert(`Something went wrong in payment-form.tsx: ${error}`)
     }
   }
 

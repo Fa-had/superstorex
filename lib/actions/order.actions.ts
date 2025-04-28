@@ -231,7 +231,6 @@ export async function createBkashOrder(orderId: string) {
         reference: '1',
       }
       const bkashOrder = await createPayment(bkashConfig, paymentDetails)
-      console.log('order.action: ', bkashOrder)
       order.paymentResult = {
         paymentID: bkashOrder.paymentID,
         statusMessage: '',
@@ -264,7 +263,6 @@ export async function executeBkashOrder(
     // if (!order) throw new Error('Order not found')
 
     const captureData = await executePayment(bkashConfig, data.orderID)
-    console.log(captureData)
     const orderId = captureData.merchantInvoiceNumber
     const order = await Order.findById(orderId).populate('user', 'email')
     if (!order) throw new Error('Order not found')

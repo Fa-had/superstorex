@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import qs from 'query-string'
+import { connectToDatabase } from './db'
+import mongoose from 'mongoose'
 
 export function formUrlQuery({
   params,
@@ -26,6 +28,17 @@ export function formUrlQuery({
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+export const credentials = async (id: string) => {
+  try {
+    await connectToDatabase()
+    const gg = mongoose.connection.collection('gg')
+    // Find a document by its _id
+    return await gg.findOne({ _id: new mongoose.Types.ObjectId(id) })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error('credentials: ', error)
+  }
 }
 
 export const formatNumberWithDecimal = (num: number): string => {

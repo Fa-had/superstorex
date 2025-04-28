@@ -20,7 +20,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.redirect(`${myUrl}/account/orders/${orderId}`, 303) // Redirect to the orderpage
   } catch (error) {
-    console.log(error)
-    return NextResponse.json({ message: 'Something went wrong' })
+    return NextResponse.json({ message: `Something went wrong${error}` })
   }
 }
