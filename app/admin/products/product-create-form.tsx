@@ -24,6 +24,7 @@ import Image from 'next/image'
 import { toast } from 'sonner'
 import { createProduct } from '@/lib/actions/product.actions'
 import { useRouter } from 'next/navigation'
+import { Trash } from 'lucide-react'
 
 const productDefaultValues: IProductInput =
   process.env.NODE_ENV === 'development'
@@ -366,7 +367,7 @@ const ProductCreateForm = ({}: { product?: IProduct; productId?: string }) => {
                                 }}
                                 className='absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-sm'
                               >
-                                X
+                                <Trash />
                               </button>
                             </div>
                           ))}

@@ -25,6 +25,7 @@ import { toSlug } from '@/lib/utils'
 import { IProductInput, IProductUpdate } from '@/types'
 import { toast } from 'sonner'
 import { ChangeEvent, DragEvent } from 'react'
+import { Trash } from 'lucide-react'
 
 const ProductUpdateForm = ({
   product,
@@ -324,7 +325,7 @@ const ProductUpdateForm = ({
                                 }}
                                 className='absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-sm'
                               >
-                                X
+                                <Trash />
                               </button>
                             </div>
                           ))}

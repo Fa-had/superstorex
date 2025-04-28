@@ -4,7 +4,6 @@ import { getProductById } from '@/lib/actions/product.actions'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import ProductUpdateForm from '../product-update-form'
-import { auth } from '@/auth'
 
 export const metadata: Metadata = {
   title: 'Edit Product',
@@ -17,9 +16,6 @@ type UpdateProductProps = {
 }
 
 const UpdateProduct = async (props: UpdateProductProps) => {
-  const session = await auth()
-  if (session?.user.role !== 'Admin')
-    throw new Error('Admin permission required')
   const params = await props.params
   const { id } = params
 
