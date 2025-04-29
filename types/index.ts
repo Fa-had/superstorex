@@ -11,6 +11,7 @@ import {
   UserSignInSchema,
   UserSignUpSchema,
   UserUpdateSchema,
+  WebPageInputSchema,
 } from '@/lib/validator'
 import { z } from 'zod'
 
@@ -30,6 +31,7 @@ export type IProductUpdate = z.infer<typeof ProductUpdateSchema>
 export type Data = {
   users: IUserInput[]
   products: IProductInput[]
+  webPages: IWebPageInput[]
   reviews: {
     title: string
     rating: number
@@ -92,3 +94,6 @@ export type ICredential = {
   client_email: string
   private_key: string
 }
+
+// webpage
+export type IWebPageInput = z.infer<typeof WebPageInputSchema>
