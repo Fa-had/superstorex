@@ -17,6 +17,8 @@ import { IOrder } from '@/lib/db/models/order.model'
 import { cn, formatDateTime } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import ProductPrice from '../product/product-price'
+import ActionButton from '../action-Button'
+import { deliverOrder, updateOrderToPaid } from '@/lib/actions/order.actions'
 
 export default function OrderDetailsForm({
   order,
@@ -145,7 +147,7 @@ export default function OrderDetailsForm({
               </div>
             </div>
 
-            {!isPaid && ['Stripe', 'PayPal'].includes(paymentMethod) && (
+            {!isPaid && ['Bkash', 'Rocket'].includes(paymentMethod) && (
               <Link
                 className={cn(buttonVariants(), 'w-full')}
                 href={`/checkout/${order._id}`}
@@ -154,7 +156,7 @@ export default function OrderDetailsForm({
               </Link>
             )}
 
-            {/* {isAdmin && !isPaid && paymentMethod === 'Cash On Delivery' && (
+            {isAdmin && !isPaid && paymentMethod === 'Cash On Delivery' && (
               <ActionButton
                 caption='Mark as paid'
                 action={() => updateOrderToPaid(order._id)}
@@ -165,7 +167,7 @@ export default function OrderDetailsForm({
                 caption='Mark as delivered'
                 action={() => deliverOrder(order._id)}
               />
-            )} */}
+            )}
             {isAdmin && !isPaid && paymentMethod === 'Cash On Delivery' && (
               <>Cash on delivery (order-details-form)</>
             )}

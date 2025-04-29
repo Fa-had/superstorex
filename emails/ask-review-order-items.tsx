@@ -1,5 +1,6 @@
 import {
   Body,
+  Button,
   Column,
   Container,
   Head,
@@ -22,7 +23,7 @@ type OrderInformationProps = {
   order: IOrder
 }
 
-PurchaseReceiptEmail.PreviewProps = {
+AskReviewOrderItemsEmail.PreviewProps = {
   order: {
     _id: '123',
     isPaid: true,
@@ -46,7 +47,7 @@ PurchaseReceiptEmail.PreviewProps = {
       {
         clientId: '123',
         name: 'Product 1',
-        image: 'https://via.placeholder.com/150',
+        image: '/images/mq-4_detection_smoke_module-1.webp',
         price: 100,
         quantity: 1,
         product: '123',
@@ -55,24 +56,24 @@ PurchaseReceiptEmail.PreviewProps = {
         countInStock: 10,
       },
     ],
-    paymentMethod: 'Bikash',
+    paymentMethod: 'Cash On Delivery',
     expectedDeliveryDate: new Date(),
     isDelivered: true,
   } as IOrder,
 } satisfies OrderInformationProps
 const dateFormatter = new Intl.DateTimeFormat('en', { dateStyle: 'medium' })
 
-export default async function PurchaseReceiptEmail({
+export default async function AskReviewOrderItemsEmail({
   order,
 }: OrderInformationProps) {
   return (
     <Html>
-      <Preview>View order receipt</Preview>
+      <Preview>Review Order Items</Preview>
       <Tailwind>
         <Head />
         <Body className='font-sans bg-white'>
           <Container className='max-w-xl'>
-            <Heading>Purchase Receipt</Heading>
+            <Heading>Review Order Items</Heading>
             <Section>
               <Row>
                 <Column>
@@ -123,14 +124,19 @@ export default async function PurchaseReceiptEmail({
                       </Text>
                     </Link>
                   </Column>
-                  <Column align='right' className='align-top'>
-                    <Text className='m-0 '>{formatCurrency(item.price)}</Text>
+                  <Column align='right' className='align-top '>
+                    <Button
+                      href={`${SERVER_URL}/product/${item.slug}#reviews`}
+                      className='text-center bg-blue-500 hover:bg-blue-700 text-white   py-2 px-4 rounded'
+                    >
+                      Review this product
+                    </Button>
                   </Column>
                 </Row>
               ))}
               {[
                 { name: 'Items', price: order.itemsPrice },
-                { name: 'Delivery', price: order.deliveryCharge },
+                { name: 'Shipping', price: order.deliveryCharge },
                 { name: 'Total', price: order.totalPrice },
               ].map(({ name, price }) => (
                 <Row key={name} className='py-1'>

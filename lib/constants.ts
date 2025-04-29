@@ -6,8 +6,7 @@ export const APP_DESCRIPTION =
   process.env.NEXT_PUBLIC_APP_DESCRIPTION ||
   'value NULL, CHECK lib/constants.ts'
 
-export const SERVER_URL =
-  process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+export const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3000'
 export const SENDER_NAME = process.env.SENDER_NAME || 'SuperStoreX Support'
 export const SENDER_EMAIL =
   process.env.SENDER_EMAIL || 'superstorex.bd@gmail.com'
