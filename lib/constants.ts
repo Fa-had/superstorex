@@ -65,3 +65,4 @@ export const AVAILABLE_DELIVERY_DATES = [
     freeDeliveryMinCharge: 0,
   },
 ]
+export const USER_ROLES = ['Admin', 'User']

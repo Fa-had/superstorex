@@ -10,6 +10,7 @@ import {
   UserNameSchema,
   UserSignInSchema,
   UserSignUpSchema,
+  UserUpdateSchema,
 } from '@/lib/validator'
 import { z } from 'zod'
 
@@ -79,6 +80,7 @@ export type IUserInput = z.infer<typeof UserInputSchema>
 export type IUserSignIn = z.infer<typeof UserSignInSchema>
 export type IUserSignUp = z.infer<typeof UserSignUpSchema>
 export type IUserName = z.infer<typeof UserNameSchema>
+export type IUserUpdate = z.infer<typeof UserUpdateSchema>
 
 //image
 export type IImage = {
