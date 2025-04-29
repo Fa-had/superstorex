@@ -12,6 +12,7 @@ import {
   UserSignUpSchema,
   UserUpdateSchema,
   WebPageInputSchema,
+  WebPageUpdateSchema,
 } from '@/lib/validator'
 import { z } from 'zod'
 
@@ -97,3 +98,4 @@ export type ICredential = {
 
 // webpage
 export type IWebPageInput = z.infer<typeof WebPageInputSchema>
+export type IWebPageUpdate = z.infer<typeof WebPageUpdateSchema>
