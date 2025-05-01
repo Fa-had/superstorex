@@ -13,21 +13,14 @@ import {
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { useTranslations } from 'next-intl'
+import { ICarousel } from '@/types'
 
-export function HomeCarousel({
-  items,
-}: {
-  items: {
-    image: string
-    url: string
-    title: string
-    buttonCaption: string
-  }[]
-}) {
+export function HomeCarousel({ items }: { items: ICarousel[] }) {
   const plugin = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: true })
   )
-
+  const t = useTranslations('Home')
   return (
     <Carousel
       dir='ltr'
@@ -54,10 +47,10 @@ export function HomeCarousel({
                       'text-xl md:text-6xl font-bold mb-4 text-primary  '
                     )}
                   >
-                    {item.title}
+                    ${item.title}
                   </h2>
                   <Button className='hidden md:block'>
-                    {item.buttonCaption}
+                    {t(`${item.buttonCaption}`)}
                   </Button>
                 </div>
               </div>
@@ -65,8 +58,8 @@ export function HomeCarousel({
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className='left-0 md:left-12' />
-      <CarouselNext className='right-0 md:right-12' />
+      <CarouselPrevious className='left-0 md:left-12  dark:text-black dark:bg-gray-300 dark:hover:bg-gray-200' />
+      <CarouselNext className='right-0 md:right-12 dark:text-black dark:bg-gray-300 dark:hover:bg-gray-200' />
     </Carousel>
   )
 }

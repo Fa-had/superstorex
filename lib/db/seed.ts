@@ -2,13 +2,13 @@ import data from '@/lib/data'
 import { connectToDatabase } from '.'
 import { cwd } from 'process'
 import { loadEnvConfig } from '@next/env'
-import WebPage from './models/web-page.model'
+import Setting from './models/setting.model'
 
 loadEnvConfig(cwd())
 
 const main = async () => {
   try {
-    const { webPages } = data
+    const { settings } = data
     await connectToDatabase(process.env.MONGODB_URI)
 
     // await User.deleteMany()
@@ -17,11 +17,14 @@ const main = async () => {
     // await Product.deleteMany()
     // const createdProducts = await Product.insertMany(products)
 
-    await WebPage.deleteMany()
-    const createdWebpages = await WebPage.insertMany(webPages)
+    // await WebPage.deleteMany()
+    // const createdWebpages = await WebPage.insertMany(webPages)
+    await Setting.deleteMany()
+    const createdSetting = await Setting.insertMany(settings)
 
     console.log({
-      createdWebpages,
+      createdSetting,
+      // createdWebpages,
       // createdUser,
       // createdProducts,
       message: 'Seeded database successfully',

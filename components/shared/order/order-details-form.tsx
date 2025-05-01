@@ -168,12 +168,12 @@ export default function OrderDetailsForm({
                 action={() => deliverOrder(order._id)}
               />
             )}
-            {isAdmin && !isPaid && paymentMethod === 'Cash On Delivery' && (
+            {/* {isAdmin && !isPaid && paymentMethod === 'Cash On Delivery' && (
               <>Cash on delivery (order-details-form)</>
             )}
             {isAdmin && isPaid && !isDelivered && (
               <>delivery (order-details-form)</>
-            )}
+            )} */}
           </CardContent>
         </Card>
       </div>

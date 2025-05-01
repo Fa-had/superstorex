@@ -1,11 +1,31 @@
 'use client'
 import { ChevronUp } from 'lucide-react'
 import Link from 'next/link'
-// import Image from 'next/image'
-import { APP_NAME } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
+import { usePathname, useRouter } from '@/i18n/routing'
+import useSettingStore from '@/hooks/use-setting-store'
+import { i18n } from '@/i18n-config'
+import { useLocale, useTranslations } from 'next-intl'
+import Image from 'next/image'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select'
 
 export default function Footer() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const {
+    setting: { site, availableCurrencies, currency },
+    setCurrency,
+  } = useSettingStore()
+  const { locales } = i18n
+
+  const locale = useLocale()
+  const t = useTranslations()
   return (
     <footer className='bg-black  text-white underline-link'>
       <div className='w-full'>
@@ -15,9 +35,9 @@ export default function Footer() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <ChevronUp className='mr-2 h-4 w-4' />
-          Back to top
+          {t('Footer.Back to top')}
         </Button>
-        {/* <div className='grid grid-cols-1 md:grid-cols-3 gap-6 p-6 max-w-7xl mx-auto'>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-6 p-6 max-w-7xl mx-auto'>
           <div>
             <h3 className='font-bold mb-2'>{t('Footer.Get to Know Us')}</h3>
             <ul className='space-y-2'>
@@ -132,20 +152,22 @@ export default function Footer() {
               </Select>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
       <div className='p-4'>
         <div className='flex justify-center  gap-3 text-sm'>
-          <Link href='/page/conditions-of-use'>Conditions of Use</Link>
-          <Link href='/page/privacy-policy'>Privacy Notice</Link>
-          <Link href='/page/help'>Help</Link>
+          <Link href='/page/conditions-of-use'>
+            {t('Footer.Conditions of Use')}
+          </Link>
+          <Link href='/page/privacy-policy'>{t('Footer.Privacy Notice')}</Link>
+          <Link href='/page/help'>{t('Footer.Help')}</Link>
         </div>
         <div className='flex justify-center text-sm'>
-          <p> © 2025, {APP_NAME} Inc.</p>
+          <p> © {site.copyright}</p>
         </div>
-        {/* <div className='mt-8 flex justify-center text-sm text-gray-400'>
-          123, Main Street
-        </div> */}
+        <div className='mt-8 flex justify-center text-sm text-gray-400'>
+          {site.address} | {site.phone}
+        </div>
       </div>
     </footer>
   )

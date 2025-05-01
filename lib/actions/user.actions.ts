@@ -7,10 +7,10 @@ import { UserSignUpSchema } from '../validator'
 import { connectToDatabase } from '../db'
 import User, { IUser } from '../db/models/user.model'
 import { revalidatePath } from 'next/cache'
-import { PAGE_SIZE } from '../constants'
 import { formatError } from '../utils'
 import { toast } from 'sonner'
 import bcrypt from 'bcryptjs'
+import { getSetting } from './setting.actions'
 
 export async function signInWithCredentials(user: IUserSignIn) {
   return await signIn('credentials', { ...user, redirect: false })
@@ -87,7 +87,10 @@ export async function getAllUsers({
   limit?: number
   page: number
 }) {
-  limit = limit || PAGE_SIZE
+  const {
+    common: { pageSize },
+  } = await getSetting()
+  limit = limit || pageSize
   await connectToDatabase()
 
   const skipAmount = (Number(page) - 1) * limit

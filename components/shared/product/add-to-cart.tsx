@@ -14,6 +14,7 @@ import { OrderItem } from '@/types'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { useTranslations } from 'next-intl'
 
 export default function AddToCart({
   item,
@@ -23,7 +24,7 @@ export default function AddToCart({
   minimal?: boolean
 }) {
   const router = useRouter()
-
+  const t = useTranslations()
   const { addItem } = useCartStore()
 
   //add quantity state
@@ -36,14 +37,14 @@ export default function AddToCart({
         try {
           addItem(item, 1)
           toast('Cart has been added', {
-            description: 'Added to Cart',
+            description: t('Product.Added to Cart'),
             action: (
               <Button
                 onClick={() => {
                   router.push('/cart')
                 }}
               >
-                {'Go to Cart'}
+                {t('Product.Go to Cart')}
               </Button>
             ),
           })
@@ -52,7 +53,7 @@ export default function AddToCart({
         }
       }}
     >
-      Add to Cart
+      {t('Product.Add to Cart')}
     </Button>
   ) : (
     <div className='w-full space-y-2'>
@@ -61,7 +62,9 @@ export default function AddToCart({
         onValueChange={(i) => setQuantity(Number(i))}
       >
         <SelectTrigger className=''>
-          <SelectValue>Quantity: {quantity}</SelectValue>
+          <SelectValue>
+            {t('Product.Quantity')}: {quantity}
+          </SelectValue>{' '}
         </SelectTrigger>
         <SelectContent position='popper'>
           {Array.from({ length: item.countInStock }).map((_, i) => (
@@ -84,7 +87,7 @@ export default function AddToCart({
           }
         }}
       >
-        Add to Cart
+        {t('Product.Add to Cart')}
       </Button>
       <Button
         variant='secondary'
@@ -98,7 +101,7 @@ export default function AddToCart({
         }}
         className='w-full rounded-full '
       >
-        Buy Now
+        {t('Product.Buy Now')}
       </Button>
     </div>
   )

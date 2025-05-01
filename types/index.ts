@@ -1,11 +1,17 @@
 import {
+  CarouselSchema,
   CartSchema,
   DeliveryAddressSchema,
+  DeliveryDateSchema,
   OrderInputSchema,
   OrderItemSchema,
+  PaymentMethodSchema,
   ProductInputSchema,
   ProductUpdateSchema,
   ReviewInputSchema,
+  SettingInputSchema,
+  SiteCurrencySchema,
+  SiteLanguageSchema,
   UserInputSchema,
   UserNameSchema,
   UserSignInSchema,
@@ -49,6 +55,7 @@ export type Data = {
     buttonCaption: string
     isPublished: boolean
   }[]
+  settings: ISettingInput[]
 }
 export type BkashConfig = {
   base_url: string | undefined
@@ -99,3 +106,14 @@ export type ICredential = {
 // webpage
 export type IWebPageInput = z.infer<typeof WebPageInputSchema>
 export type IWebPageUpdate = z.infer<typeof WebPageUpdateSchema>
+
+// setting
+export type ICarousel = z.infer<typeof CarouselSchema>
+export type ISettingInput = z.infer<typeof SettingInputSchema>
+export type ClientSetting = ISettingInput & {
+  currency: string
+}
+export type SiteLanguage = z.infer<typeof SiteLanguageSchema>
+export type SiteCurrency = z.infer<typeof SiteCurrencySchema>
+export type PaymentMethod = z.infer<typeof PaymentMethodSchema>
+export type DeliveryDate = z.infer<typeof DeliveryDateSchema>

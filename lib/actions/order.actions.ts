@@ -2,7 +2,7 @@
 
 import { Cart, DeliveryAddress, IOrderList, OrderItem } from '@/types'
 import { formatError, round2 } from '../utils'
-import { AVAILABLE_DELIVERY_DATES, PAGE_SIZE } from '../constants'
+import { getSetting } from './setting.actions'
 import { connectToDatabase } from '../db'
 import { auth } from '@/auth'
 import { OrderInputSchema } from '../validator'
@@ -168,7 +168,10 @@ export async function getAllOrders({
   limit?: number
   page: number
 }) {
-  limit = limit || PAGE_SIZE
+  const {
+    common: { pageSize },
+  } = await getSetting()
+  limit = limit || pageSize
   await connectToDatabase()
   const skipAmount = (Number(page) - 1) * limit
   const orders = await Order.find()
@@ -189,10 +192,10 @@ export async function getMyOrders({
   limit?: number
   page: number
 }) {
-  // const {
-  //   common: { pageSize },
-  // } = await getSetting()
-  limit = limit || PAGE_SIZE
+  const {
+    common: { pageSize },
+  } = await getSetting()
+  limit = limit || pageSize
   await connectToDatabase()
   const session = await auth()
   if (!session) {
@@ -220,11 +223,11 @@ export async function getOrderById(orderId: string): Promise<IOrder> {
 
 export async function createBkashOrder(orderId: string) {
   await connectToDatabase()
-
+  const { site } = await getSetting()
   try {
     const order = await Order.findById(orderId)
     if (order) {
-      const myUrl = process.env.SERVER_URL
+      const myUrl = site.url
       const paymentDetails = {
         amount: order.totalPrice,
         callbackURL: `${myUrl}/api/bkashCallback`,
@@ -304,15 +307,15 @@ export const calcDeliveryDateAndPrice = async ({
   items: OrderItem[]
   deliveryAddress?: DeliveryAddress
 }) => {
-  //   const { availableDeliveryDates } = await getSetting()
+  const { availableDeliveryDates } = await getSetting()
   const itemsPrice = round2(
     items.reduce((acc, item) => acc + item.price * item.quantity, 0)
   )
 
   const deliveryDate =
-    AVAILABLE_DELIVERY_DATES[
+    availableDeliveryDates[
       deliveryDateIndex === undefined
-        ? AVAILABLE_DELIVERY_DATES.length - 1
+        ? availableDeliveryDates.length - 1
         : deliveryDateIndex
     ]
   const deliveryCharge =
@@ -323,16 +326,14 @@ export const calcDeliveryDateAndPrice = async ({
         ? 0
         : deliveryDate.deliveryCharge
 
-  // const deliveryCharge = itemsPrice > DELIVERY_CHARGE ? 0 : 50
-
   const totalPrice = round2(
     itemsPrice + (deliveryCharge ? round2(deliveryCharge) : 0)
   )
   return {
-    AVAILABLE_DELIVERY_DATES,
+    availableDeliveryDates,
     deliveryDateIndex:
       deliveryDateIndex === undefined
-        ? AVAILABLE_DELIVERY_DATES.length - 1
+        ? availableDeliveryDates.length - 1
         : deliveryDateIndex,
     itemsPrice,
     deliveryCharge,
@@ -415,10 +416,10 @@ export async function getOrderSummary(date: DateRange) {
   const topSalesCategories = await getTopSalesCategories(date)
   const topSalesProducts = await getTopSalesProducts(date)
 
-  // const {
-  //   common: { pageSize },
-  // } = await getSetting()
-  const limit = PAGE_SIZE
+  const {
+    common: { pageSize },
+  } = await getSetting()
+  const limit = pageSize
   const latestOrders = await Order.find()
     .populate('user', 'name')
     .sort({ createdAt: 'desc' })

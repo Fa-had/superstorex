@@ -1,6 +1,7 @@
 import { Data, IProductInput, IUserInput } from '@/types'
 import { toSlug } from './utils'
 import bcrypt from 'bcryptjs'
+import { i18n } from '@/i18n-config'
 
 const products: IProductInput[] = [
   //new added
@@ -549,6 +550,91 @@ const data: Data = {
       image: '/images/Arduino_Banner.webp',
       url: '/search?category=Development-Board',
       isPublished: true,
+    },
+  ],
+  settings: [
+    {
+      common: {
+        freeDeliveryMinCharge: 35,
+        isMaintenanceMode: false,
+        defaultTheme: 'Light',
+        defaultColor: 'Gold',
+        pageSize: 9,
+      },
+      site: {
+        name: 'SuperStoreX',
+        description: 'An E-commerce for online buiesness',
+        keywords: 'Online Shop, Electronics, Accessories, Gedgets',
+        url: 'https://superstorex.vercel.app',
+        logo: '/icons/logo.svg',
+        slogan: 'Spend less, enjoy most',
+        author: 'SuperStoreX',
+        copyright: '2025-2025, SuperStoreX.com, Inc.',
+        email: 'superstorex.bd@gmail.com',
+        address: '',
+        phone: '',
+      },
+      carousels: [
+        {
+          title: 'Most Popular ESP32 Camera For Sale',
+          buttonCaption: 'Shop Now',
+          image: '/images/Banner_ESP32-CAM.webp',
+          url: '/search?category=Development-Board',
+        },
+        {
+          title: 'Most Popular Luckfox pico For Sale',
+          buttonCaption: 'Shop Now',
+          image: '/images/Luckfox-Pico-M.webp',
+          url: '/search?category=Development-Board',
+        },
+        {
+          title: 'Most Popular Arduino For Sale',
+          buttonCaption: 'See More',
+          image: '/images/Arduino_Banner.webp',
+          url: '/search?category=Development-Board',
+        },
+      ],
+      availableLanguages: i18n.locales.map((locale) => ({
+        code: locale.code,
+        name: locale.name,
+      })),
+      defaultLanguage: i18n.defaultLocale,
+      availableCurrencies: [
+        {
+          name: 'Bangladeshi Taka',
+          code: 'BDT',
+          symbol: '৳',
+          convertRate: 1,
+        },
+      ],
+      defaultCurrency: 'BDT',
+      availablePaymentMethods: [
+        { name: 'Bkash', commission: 0 },
+        { name: 'Rocket', commission: 0 },
+        { name: 'Cash On Delivery', commission: 0 },
+      ],
+      defaultPaymentMethod: 'Cash On Delivery',
+      availableDeliveryDates: [
+        {
+          name: 'Tomorrow',
+          daysToDeliver: 1,
+          deliveryCharge: 50,
+          freeDeliveryMinCharge: 0,
+        },
+        {
+          name: 'Next 3 Days',
+          daysToDeliver: 3,
+          deliveryCharge: 50,
+          freeDeliveryMinCharge: 0,
+        },
+        {
+          name: 'Next 5 Days',
+          daysToDeliver: 5,
+          deliveryCharge: 50,
+          freeDeliveryMinCharge: 0,
+        },
+      ],
+      defaultDeliveryDate: 'Next 5 Days',
     },
   ],
 }
