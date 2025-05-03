@@ -217,7 +217,9 @@ export const CarouselSchema = z.object({
   title: z.string().min(1, 'title is required'),
   url: z.string().min(1, 'url is required'),
   image: z.string().min(1, 'image is required'),
+  imageId: z.string().min(1, 'imageId is required'),
   buttonCaption: z.string().min(1, 'buttonCaption is required'),
+  isPublished: z.boolean(),
 })
 
 export const SiteCurrencySchema = z.object({
@@ -248,20 +250,24 @@ export const SettingInputSchema = z.object({
     pageSize: z.coerce
       .number()
       .min(1, 'Page size must be at least 1')
-      .default(9),
-    isMaintenanceMode: z.boolean().default(false),
+      .default(9)
+      .optional(),
+    isMaintenanceMode: z.boolean().default(false).optional(),
     freeDeliveryMinCharge: z.coerce
       .number()
       .min(0, 'Free delivery min price must be at least 0')
-      .default(0),
+      .default(0)
+      .optional(),
     defaultTheme: z
       .string()
       .min(1, 'Default theme is required')
-      .default('light'),
+      .default('light')
+      .optional(),
     defaultColor: z
       .string()
       .min(1, 'Default color is required')
-      .default('gold'),
+      .default('gold')
+      .optional(),
   }),
   site: z.object({
     name: z.string().min(1, 'Name is required'),

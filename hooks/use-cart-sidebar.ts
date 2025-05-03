@@ -8,11 +8,8 @@ const locales = i18n.locales
   .map((locale) => locale.code)
 
 const isNotInPaths = (s: string) => {
-  console.log(locales)
-  console.log(s)
   const localePattern = `/(?:${locales.join('|')})` // Match locales
   const pathsPattern = `^(?:${localePattern})?(?:/$|/cart$|/checkout$|/sign-in$|/sign-up$|/order(?:/.*)?$|/account(?:/.*)?$|/admin(?:/.*)?$)?$`
-  console.log(!new RegExp(pathsPattern).test(s))
   return !new RegExp(pathsPattern).test(s)
 }
 

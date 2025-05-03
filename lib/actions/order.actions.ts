@@ -171,7 +171,7 @@ export async function getAllOrders({
   const {
     common: { pageSize },
   } = await getSetting()
-  limit = limit || pageSize
+  limit = limit || pageSize || 5
   await connectToDatabase()
   const skipAmount = (Number(page) - 1) * limit
   const orders = await Order.find()
@@ -195,7 +195,7 @@ export async function getMyOrders({
   const {
     common: { pageSize },
   } = await getSetting()
-  limit = limit || pageSize
+  limit = limit || pageSize || 5
   await connectToDatabase()
   const session = await auth()
   if (!session) {
@@ -419,7 +419,7 @@ export async function getOrderSummary(date: DateRange) {
   const {
     common: { pageSize },
   } = await getSetting()
-  const limit = pageSize
+  const limit = pageSize || 5
   const latestOrders = await Order.find()
     .populate('user', 'name')
     .sort({ createdAt: 'desc' })

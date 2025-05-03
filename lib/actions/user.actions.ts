@@ -90,7 +90,7 @@ export async function getAllUsers({
   const {
     common: { pageSize },
   } = await getSetting()
-  limit = limit || pageSize
+  limit = limit || pageSize || 5
   await connectToDatabase()
 
   const skipAmount = (Number(page) - 1) * limit

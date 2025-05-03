@@ -113,7 +113,7 @@ export async function getReviews({
   const {
     common: { pageSize },
   } = await getSetting()
-  limit = limit || pageSize
+  limit = limit || pageSize || 5
   await connectToDatabase()
   const skipAmount = (page - 1) * limit
   const reviews = await Review.find({ product: productId })

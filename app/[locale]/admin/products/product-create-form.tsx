@@ -367,7 +367,7 @@ const ProductCreateForm = ({}: { product?: IProduct; productId?: string }) => {
                                 }}
                                 className='absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-sm'
                               >
-                                <Trash />
+                                <Trash className='w-4 h-4' />
                               </button>
                             </div>
                           ))}

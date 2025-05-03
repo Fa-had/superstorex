@@ -14,6 +14,20 @@ export const getNoCachedSetting = async (): Promise<ISettingInput> => {
   const setting = await Setting.findOne()
   return JSON.parse(JSON.stringify(setting)) as ISettingInput
 }
+export const getCarouselsFromSettings = async () => {
+  await connectToDatabase()
+  const results = await Setting.aggregate([
+    { $unwind: '$carousels' },
+    { $match: { 'carousels.isPublished': true } },
+    {
+      $group: {
+        _id: null, // Group all documents together (no specific grouping by tag)
+        carousels: { $push: '$carousels' }, // Push the entire tag object into an array
+      },
+    },
+  ])
+  return results.length > 0 ? results[0].carousels : []
+}
 
 export const getSetting = async (): Promise<ISettingInput> => {
   if (!globalForSettings.cachedSettings) {

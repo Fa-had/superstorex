@@ -22,6 +22,7 @@ export default function CartAddItem({ itemId }: { itemId: string }) {
       common: { freeDeliveryMinCharge },
     },
   } = useSettingStore()
+  const freeDeliveryMinCharge_copy = freeDeliveryMinCharge || 1500
   const t = useTranslations()
   if (!item) return notFound()
   return (
@@ -61,18 +62,16 @@ export default function CartAddItem({ itemId }: { itemId: string }) {
           <CardContent className='p-4 h-full'>
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
               <div className='flex justify-center items-center'>
-                {itemsPrice < freeDeliveryMinCharge ? (
+                {itemsPrice < freeDeliveryMinCharge_copy ? (
                   <div className='text-center '>
                     {t('Cart.Add')}{' '}
                     <span className='text-green-700'>
                       <ProductPrice
-                        price={freeDeliveryMinCharge - itemsPrice}
+                        price={freeDeliveryMinCharge_copy - itemsPrice}
                         plain
                       />
                     </span>{' '}
-                    {t(
-                      'Cart.of eligible items to your order to qualify for FREE Shipping'
-                    )}
+                    of eligible items to your order to qualify for FREE Shipping
                   </div>
                 ) : (
                   <div className='flex items-center'>

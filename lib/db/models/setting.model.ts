@@ -14,7 +14,7 @@ const settingSchema = new Schema<ISetting>(
       isMaintenanceMode: { type: Boolean, required: true, default: false },
       freeDeliveryMinCharge: { type: Number, required: true, default: 0 },
       defaultTheme: { type: String, required: true, default: 'light' },
-      defaultColor: { type: String, required: true, default: 'gold' },
+      defaultColor: { type: String, required: true, default: 'Green' },
     },
     site: {
       name: { type: String, required: true },
@@ -44,9 +44,18 @@ const settingSchema = new Schema<ISetting>(
           type: String,
           required: true,
         },
+        imageId: {
+          type: String,
+          required: true,
+        },
         buttonCaption: {
           type: String,
           required: true,
+        },
+        isPublished: {
+          type: Boolean,
+          required: true,
+          default: true,
         },
       },
     ],

@@ -30,7 +30,7 @@ export default function CartSidebar() {
       common: { freeDeliveryMinCharge },
     },
   } = useSettingStore()
-
+  const freeDeliveryMinCharge_copy = freeDeliveryMinCharge || 1500
   const t = useTranslations()
   const locale = useLocale()
   return (
@@ -46,7 +46,7 @@ export default function CartSidebar() {
             <div className='font-bold '>
               <ProductPrice price={itemsPrice} plain />
             </div>
-            {itemsPrice > freeDeliveryMinCharge && (
+            {itemsPrice > freeDeliveryMinCharge_copy && (
               <div className=' text-center text-xs'>
                 {t('Cart.Your order qualifies for FREE Shipping')}
               </div>

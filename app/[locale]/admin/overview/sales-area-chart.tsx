@@ -55,7 +55,8 @@ const CustomXAxisTick: React.FC<any> = ({ x, y, payload }) => {
 const STROKE_COLORS: { [key: string]: { [key: string]: string } } = {
   Red: { light: '#980404', dark: '#ff3333' },
   Green: { light: '#015001', dark: '#06dc06' },
-  Gold: { light: '#ac9103', dark: '#f1d541' },
+  Blue: { light: '#000066', dark: '#0000ff' },
+  Violet: { light: '#38005d', dark: '#8a00e6' },
 }
 
 export default function SalesAreaChart({ data }: { data: any[] }) {

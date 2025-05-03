@@ -8,7 +8,7 @@ import {
   getProductsByTag,
   getProductsForCard,
 } from '@/lib/actions/product.actions'
-import data from '@/lib/data'
+import { getCarouselsFromSettings } from '@/lib/actions/setting.actions'
 import { toSlug } from '@/lib/utils'
 
 export default async function HomePage() {
@@ -64,10 +64,11 @@ export default async function HomePage() {
   const todaysDeals = await getProductsByTag({ tag: 'todays-deal' })
 
   const bestSellingProducts = await getProductsByTag({ tag: 'best-seller' })
+  const carousels = await getCarouselsFromSettings()
 
   return (
     <>
-      <HomeCarousel items={data.carousels} />
+      <HomeCarousel items={JSON.parse(JSON.stringify(carousels))} />
       <div className='md:p-4 md:space-y-4 bg-border'>
         <HomeCard cards={cards} />
         <Card className='w-full rounded-none'>

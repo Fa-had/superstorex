@@ -50,6 +50,7 @@ export type Data = {
   }[]
   carousels: {
     image: string
+    imageId: string
     url: string
     title: string
     buttonCaption: string

@@ -32,6 +32,7 @@ export default function CartPage() {
     },
   } = useSettingStore()
   const t = useTranslations()
+  const freeDeliveryMinCharge_copy = freeDeliveryMinCharge || 1500
   return (
     <div>
       <div className='grid grid-cols-1 md:grid-cols-4  md:gap-4'>
@@ -166,18 +167,17 @@ export default function CartPage() {
             <div>
               <Card className='rounded-none'>
                 <CardContent className='py-4 space-y-4'>
-                  {itemsPrice < freeDeliveryMinCharge ? (
+                  {itemsPrice < freeDeliveryMinCharge_copy ? (
                     <div className='flex-1'>
                       {t('Cart.Add')}{' '}
                       <span className='text-green-700'>
                         <ProductPrice
-                          price={freeDeliveryMinCharge - itemsPrice}
+                          price={freeDeliveryMinCharge_copy - itemsPrice}
                           plain
                         />
                       </span>{' '}
-                      {t(
-                        'Cart.of eligible items to your order to qualify for FREE Shipping'
-                      )}
+                      of eligible items to your order to qualify for FREE
+                      Shipping
                     </div>
                   ) : (
                     <div className='flex-1'>

@@ -78,7 +78,7 @@ export async function getAllProductsForAdmin({
   const {
     common: { pageSize },
   } = await getSetting()
-  limit = limit || pageSize
+  limit = limit || pageSize || 1
   const queryFilter =
     query && query !== 'all'
       ? {
@@ -179,8 +179,8 @@ export async function getProductBySlug(slug: string) {
 export async function getRelatedProductsByCategory({
   category,
   productId,
-  limit = 4,
-  page = 1,
+  limit,
+  page,
 }: {
   category: string
   productId: string
@@ -190,7 +190,7 @@ export async function getRelatedProductsByCategory({
   const {
     common: { pageSize },
   } = await getSetting()
-  limit = limit || pageSize
+  limit = limit || pageSize || 4
   await connectToDatabase()
   const skipAmount = (Number(page) - 1) * limit
   const conditions = {
@@ -232,7 +232,7 @@ export async function getAllProducts({
   const {
     common: { pageSize },
   } = await getSetting()
-  limit = limit || pageSize
+  limit = limit || pageSize || 5
   await connectToDatabase()
 
   const queryFilter =

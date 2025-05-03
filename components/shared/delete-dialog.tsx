@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import { LoadingDots } from './svg-component'
 
 export default function DeleteDialog({
   id,
@@ -59,7 +60,7 @@ export default function DeleteDialog({
               })
             }
           >
-            {isPending ? 'Deleting...' : 'Delete'}
+            {isPending ? <LoadingDots title='Delteing' /> : 'Delete'}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -19,7 +19,7 @@ export default function ClientProviders({
     <AppInitializer setting={setting}>
       <ThemeProvider
         attribute='class'
-        defaultTheme={setting.common.defaultTheme.toLocaleLowerCase()}
+        defaultTheme={setting.common.defaultTheme?.toLocaleLowerCase()}
       >
         {visible ? (
           <div className='flex min-h-screen'>
