@@ -3,13 +3,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ## Getting Started
 
 ```bash
-npm init
-# or
-yarn init
-# or
-pnpm init
-# or
-bun init
+npm install --legacy-peer-deps
 ```
 
 First, run the development server:
