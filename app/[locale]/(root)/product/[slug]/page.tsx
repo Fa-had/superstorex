@@ -17,6 +17,7 @@ import ReviewList from './review-list'
 import { auth } from '@/auth'
 import AddToCart from '@/components/shared/product/add-to-cart'
 import { generateId, round2 } from '@/lib/utils'
+import { ProductNote } from '@/components/shared/product/product-im-note'
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>
@@ -60,6 +61,10 @@ export default async function ProductDetails(props: {
         <div className='grid grid-cols-1 md:grid-cols-5  '>
           <div className='col-span-2'>
             <ProductGallery images={product.images} />
+            <ProductNote
+              className='text-xs md:text-sm font-bold text-red-400'
+              note='Product.Product Images are shown for illustrative purposes only and may differ from the actual product'
+            />
           </div>
 
           <div className='flex w-full flex-col gap-2 md:p-5 col-span-2'>
@@ -107,6 +112,10 @@ export default async function ProductDetails(props: {
                 {product.description}
               </p> */}
               <Table description={product.description} />
+              <ProductNote
+                className='text-xs md:text-sm font-bold text-red-400'
+                note='Product.Please allow 5% measuring deviation due to manual measurement'
+              />
             </div>
           </div>
           <div>
@@ -120,9 +129,15 @@ export default async function ProductDetails(props: {
                   </div>
                 )}
                 {product.countInStock !== 0 ? (
-                  <div className='text-green-700 text-xl'>In Stock</div>
+                  <ProductNote
+                    className='text-green-700 text-xl'
+                    note='Product.In Stock'
+                  />
                 ) : (
-                  <div className='text-destructive text-xl'>Out of Stock</div>
+                  <ProductNote
+                    className='text-destructive text-xl'
+                    note='Product.Out of Stock'
+                  />
                 )}
                 {/* comment out when website is ready */}
                 {product.countInStock !== 0 && (

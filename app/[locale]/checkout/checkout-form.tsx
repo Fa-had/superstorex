@@ -547,7 +547,7 @@ const CheckoutForm = () => {
                         }
                       </span>{' '}
                       {t('Checkout.If you order in the next')}{' '}
-                      {timeUntilMidnight().hours} {t('Checkout.hours')}
+                      {timeUntilMidnight().hours} {t('Checkout.hours')}{' '}
                       {t('Checkout.and')} {timeUntilMidnight().minutes}{' '}
                       {t('Checkout.minutes')}.
                     </p>
