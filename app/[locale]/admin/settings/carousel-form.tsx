@@ -1,165 +1,168 @@
-'use client'
-import { Loader, LoadingDots } from '@/components/shared/svg-component'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
+"use client";
+import { Loader, LoadingDots } from "@/components/shared/svg-component";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { ISettingInput } from '@/types'
-import { Trash, TrashIcon } from 'lucide-react'
-import Image from 'next/image'
-import { ChangeEvent, DragEvent, useState } from 'react'
-import { useFieldArray, UseFormReturn } from 'react-hook-form'
-import { toast } from 'sonner'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { ISettingInput } from "@/types";
+import { Trash, TrashIcon } from "lucide-react";
+import Image from "next/image";
+import { ChangeEvent, DragEvent, useState } from "react";
+import { useFieldArray, UseFormReturn } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function CarouselForm({
   form,
   id,
 }: {
-  form: UseFormReturn<ISettingInput>
-  id: string
+  form: UseFormReturn<ISettingInput>;
+  id: string;
 }) {
   const [uploadingImageIndex, setUploadingImageIndex] = useState<number | null>(
     null
-  )
+  );
   const [deletingImageIndex, setDeletingImageIndex] = useState<number | null>(
     null
-  )
+  );
   const handleFileChange = async (
     e: ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
     if (e.target.files?.[0]) {
-      const file = e.target.files?.[0]
-      const formData = new FormData()
-      formData.append('file', file)
+      const file = e.target.files?.[0];
+      const formData = new FormData();
+      formData.append("file", file);
       try {
-        setUploadingImageIndex(index)
-        const response = await fetch('/api/imagecrud/upload', {
-          method: 'POST',
+        setUploadingImageIndex(index);
+        const response = await fetch("/api/imagecrud/upload", {
+          method: "POST",
           body: formData,
-        })
-        const data = await response.json()
-        const { fileUrl, fileId } = data
+        });
+        const data = await response.json();
+        const { fileUrl, fileId } = data;
 
         if (response.ok) {
-          form.setValue(`carousels.${index}.image`, fileUrl)
-          form.setValue(`carousels.${index}.imageId`, fileId)
+          form.setValue(`carousels.${index}.image`, fileUrl);
+          form.setValue(`carousels.${index}.imageId`, fileId);
         } else {
-          toast.error('Error:', data.message)
+          toast.error("Error:", data.message);
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        toast.error('Upload error')
+        toast.error("Upload error");
       } finally {
-        setUploadingImageIndex(null)
+        setUploadingImageIndex(null);
       }
     }
-  }
+  };
   // Handle drag over event
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-  }
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   // Handle drop event
   const handleDrop = async (e: DragEvent<HTMLDivElement>, index: number) => {
-    e.preventDefault()
-    e.stopPropagation()
-    const files = e.dataTransfer.files
+    e.preventDefault();
+    e.stopPropagation();
+    const files = e.dataTransfer.files;
     if (files.length > 1) {
-      toast.error('Please drop only one file.')
-      return
+      toast.error("Please drop only one file.");
+      return;
     }
-    const file = files[0]
-    if (!file) return
-    const formData = new FormData()
-    formData.append('file', file)
+    const file = files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
 
     try {
-      const response = await fetch('/api/imagecrud/upload', {
-        method: 'POST',
+      setUploadingImageIndex(index);
+      const response = await fetch("/api/imagecrud/upload", {
+        method: "POST",
         body: formData,
-      })
-      const data = await response.json()
-      const { fileUrl, fileId } = data
+      });
+      const data = await response.json();
+      const { fileUrl, fileId } = data;
 
       if (response.ok) {
-        form.setValue(`carousels.${index}.image`, fileUrl)
-        form.setValue(`carousels.${index}.imageId`, fileId)
+        form.setValue(`carousels.${index}.image`, fileUrl);
+        form.setValue(`carousels.${index}.imageId`, fileId);
       } else {
-        console.error('Error:', data.message)
+        console.error("Error:", data.message);
       }
     } catch (err) {
-      console.error('Upload error:', err)
+      console.error("Upload error:", err);
+    } finally {
+      setUploadingImageIndex(null);
     }
-  }
+  };
 
   // Handle image removal
   const handleRemoveImage = async (index: number) => {
-    const idToDelete = form.watch(`carousels.${index}.imageId`)
+    const idToDelete = form.watch(`carousels.${index}.imageId`);
     try {
-      setDeletingImageIndex(index)
+      setDeletingImageIndex(index);
       const response = await fetch(`/api/imagecrud/delete/${idToDelete}`, {
-        method: 'DELETE',
-      })
-      const data = await response.json()
-      if (data.msg == 'Ok') {
-        form.setValue(`carousels.${index}.image`, '')
-        form.setValue(`carousels.${index}.imageId`, '')
-        toast.success('Successfully removed')
+        method: "DELETE",
+      });
+      const data = await response.json();
+      if (data.msg == "Ok") {
+        form.setValue(`carousels.${index}.image`, "");
+        form.setValue(`carousels.${index}.imageId`, "");
+        toast.success("Successfully removed");
       } else {
-        toast.error('Unsuccessfull')
+        toast.error("Unsuccessfull");
       }
     } catch (error) {
-      console.error('Delete error:', error)
+      console.error("Delete error:", error);
     } finally {
-      setDeletingImageIndex(null)
+      setDeletingImageIndex(null);
     }
-  }
+  };
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'carousels',
-  })
+    name: "carousels",
+  });
   const {
     watch,
     formState: { errors },
-  } = form
+  } = form;
 
   return (
     <Card id={id}>
-      <CardHeader className='flex flex-col'>
+      <CardHeader className="flex flex-col">
         <CardTitle>Carousels</CardTitle>
-        <div className='flex flex-row w-full'>
-          <div className='flex flex-row w-[57%] justify-around'>
+        <div className="flex flex-row w-full">
+          <div className="flex flex-row w-[57%] justify-around">
             <CardTitle>Title</CardTitle>
             <CardTitle>Url</CardTitle>
             <CardTitle>Caption</CardTitle>
           </div>
-          <div className='flex w-[43%] justify-between'>
+          <div className="flex w-[43%] justify-between">
             <CardTitle>Image</CardTitle>
             <CardTitle>Action</CardTitle>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className='space-y-4'>
-        <div className='space-y-4'>
+      <CardContent className="space-y-4">
+        <div className="space-y-4">
           {fields.map((field, index) => (
-            <div key={field.id} className='flex justify-between gap-1 w-full  '>
+            <div key={field.id} className="flex justify-between gap-1 w-full  ">
               <FormField
                 control={form.control}
                 name={`carousels.${index}.title`}
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} placeholder='Title' />
+                      <Input {...field} placeholder="Title" />
                     </FormControl>
                     <FormMessage>
                       {errors.carousels?.[index]?.title?.message}
@@ -173,7 +176,7 @@ export default function CarouselForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} placeholder='Url' />
+                      <Input {...field} placeholder="Url" />
                     </FormControl>
                     <FormMessage>
                       {errors.carousels?.[index]?.url?.message}
@@ -187,7 +190,7 @@ export default function CarouselForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input {...field} placeholder='buttonCaption' />
+                      <Input {...field} placeholder="buttonCaption" />
                     </FormControl>
                     <FormMessage>
                       {errors.carousels?.[index]?.buttonCaption?.message}
@@ -202,7 +205,7 @@ export default function CarouselForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input disabled placeholder='image url' {...field} />
+                        <Input disabled placeholder="image url" {...field} />
                       </FormControl>
 
                       <FormMessage />
@@ -220,61 +223,61 @@ export default function CarouselForm({
                   />
                 )} */}
                 {uploadingImageIndex === index ? (
-                  <div className='flex items-center justify-center w-full h-full'>
+                  <div className="flex items-center justify-center w-full h-full">
                     <Loader />
-                    <LoadingDots title='Uploading' />
+                    <LoadingDots title="Uploading" />
                   </div>
                 ) : (
-                  <>
+                  <div>
                     {deletingImageIndex === index ? (
-                      <div className='flex items-center justify-center w-full h-full'>
+                      <div className="flex items-center justify-center w-full h-full">
                         <Loader />
-                        <LoadingDots title='Deleting' />
+                        <LoadingDots title="Deleting" />
                       </div>
                     ) : (
-                      <>
+                      <div>
                         {watch(`carousels.${index}.image`) && (
                           <div
                             onDragOver={handleDragOver}
                             onDrop={(e) => {
-                              handleDrop(e, index)
+                              handleDrop(e, index);
                             }}
-                            className='border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative'
+                            className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative"
                           >
                             <input
-                              type='file'
+                              type="file"
                               multiple
                               onChange={(e) => {
-                                handleFileChange(e, index)
+                                handleFileChange(e, index);
                               }}
-                              className='hidden'
+                              className="hidden"
                               id={`fileInput-${index}`}
                             />
                             <label
                               htmlFor={`fileInput-${index}`}
-                              className='cursor-pointer border-2 border-dashed border-blue-500 p-4 mb-4 inline-block'
+                              className="cursor-pointer border-2 border-dashed border-blue-500 p-4 mb-4 inline-block"
                             >
                               Drag & Drop images here or click to select
                             </label>
 
-                            <div className='flex flex-wrap justify-center mt-4'>
-                              <div key={index} className='relative m-2'>
+                            <div className="flex flex-wrap justify-center mt-4">
+                              <div key={index} className="relative m-2">
                                 <Image
                                   src={watch(`carousels.${index}.image`)}
-                                  alt='image'
-                                  className=' w-full object-cover object-center rounded-sm'
+                                  alt="image"
+                                  className=" w-full object-cover object-center rounded-sm"
                                   width={384}
                                   height={136}
                                 />
 
                                 <button
-                                  type='button'
+                                  type="button"
                                   onClick={() => {
-                                    handleRemoveImage(index)
+                                    handleRemoveImage(index);
                                   }}
-                                  className='absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-sm'
+                                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-sm"
                                 >
-                                  <Trash className='w-4 h-4' />
+                                  <Trash className="w-4 h-4" />
                                 </button>
                               </div>
                             </div>
@@ -284,43 +287,43 @@ export default function CarouselForm({
                           <div
                             onDragOver={handleDragOver}
                             onDrop={(e) => {
-                              handleDrop(e, index)
+                              handleDrop(e, index);
                             }}
-                            className='border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative'
+                            className="border-2 border-dashed border-gray-300 p-6 rounded-lg text-center relative"
                           >
                             <input
-                              type='file'
+                              type="file"
                               multiple
                               onChange={(e) => {
-                                handleFileChange(e, index)
+                                handleFileChange(e, index);
                               }}
-                              className='hidden'
-                              id='fileInput'
+                              className="hidden"
+                              id="fileInput"
                             />
                             <label
-                              htmlFor='fileInput'
-                              className='cursor-pointer border-2 border-dashed border-blue-500 p-4 mb-4 inline-block'
+                              htmlFor="fileInput"
+                              className="cursor-pointer border-2 border-dashed border-blue-500 p-4 mb-4 inline-block"
                             >
                               Drag & Drop images here or click to select
                             </label>
                           </div>
                         )}
-                      </>
+                      </div>
                     )}
-                  </>
+                  </div>
                 )}
               </div>
               <div>
                 <Button
-                  type='button'
+                  type="button"
                   disabled={fields.length === 1}
-                  variant='outline'
+                  variant="outline"
                   // className={index == 0 ? 'mt-2' : ''}
                   onClick={() => {
-                    remove(index)
+                    remove(index);
                   }}
                 >
-                  <TrashIcon className='w-4 h-4' />
+                  <TrashIcon className="w-4 h-4" />
                 </Button>
               </div>
               <div>
@@ -328,7 +331,7 @@ export default function CarouselForm({
                   control={form.control}
                   name={`carousels.${index}.isPublished`}
                   render={({ field }) => (
-                    <FormItem className='space-x-2 items-center'>
+                    <FormItem className="space-x-2 items-center">
                       <FormControl>
                         <Checkbox
                           checked={field.value}
@@ -344,15 +347,15 @@ export default function CarouselForm({
           ))}
 
           <Button
-            type='button'
-            variant={'outline'}
+            type="button"
+            variant={"outline"}
             onClick={() =>
               append({
-                url: '',
-                title: '',
-                image: '',
-                imageId: '',
-                buttonCaption: '',
+                url: "",
+                title: "",
+                image: "",
+                imageId: "",
+                buttonCaption: "",
                 isPublished: true,
               })
             }
@@ -362,5 +365,5 @@ export default function CarouselForm({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
