@@ -32,12 +32,26 @@ export default async function Header() {
           </div>
 
           <div className='hidden md:block flex-1 max-w-xl'>
-            <Search />
+            {/* <Search /> */}
+            <Search
+              categories={categories}
+              t={{
+                all: t('Header.All'),
+                placeholder: t('Header.Search Site', { name: site.name }),
+              }}
+            />
           </div>
           <Menu />
         </div>
         <div className='md:hidden block py-2'>
-          <Search />
+          {/* <Search /> */}
+          <Search
+            categories={categories}
+            t={{
+              all: t('Header.All'),
+              placeholder: t('Header.Search Site', { name: site.name }),
+            }}
+          />
         </div>
       </div>
       <div className='flex items-center px-3 mb-[1px]  bg-gray-800'>
