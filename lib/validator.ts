@@ -35,6 +35,7 @@ export const ProductInputSchema = z.object({
     .min(1, 'Product must have at least one imageId with corresponding image'),
   brand: z.string().min(1, 'Brand is required'),
   description: z.string().min(1, 'Description is required'),
+  metaDescription: z.string().min(1, 'Meta Description is required'),
   isPublished: z.boolean(),
   price: Price('Price'),
   listPrice: Price('List price'),

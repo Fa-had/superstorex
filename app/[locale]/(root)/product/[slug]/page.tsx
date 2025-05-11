@@ -107,10 +107,11 @@ export default async function ProductDetails(props: {
             </div>
             <Separator className='my-2' />
             <div className='flex flex-col gap-2'>
-              {/* <p className='p-bold-20 text-grey-600'>Description</p> */}
-              {/* <p className='p-medium-16 lg:p-regular-18'>
-                {product.description}
-              </p> */}
+              <p className='p-bold-20 text-grey-600 font-bold'>Description</p>
+              <p className='p-medium-16 lg:p-regular-18 text-sm'>
+                {product.metaDescription}
+              </p>
+              <Separator className='my-2' />
               <Table description={product.description} />
               <ProductNote
                 className='text-xs md:text-sm font-bold text-red-400'

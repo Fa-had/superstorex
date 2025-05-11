@@ -32,6 +32,10 @@ const productSchema = new Schema<IProduct>(
       type: String,
       trim: true,
     },
+    metaDescription: {
+      type: String,
+      trim: true,
+    },
     price: {
       type: Number,
       required: true,
