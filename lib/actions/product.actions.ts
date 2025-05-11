@@ -335,6 +335,106 @@ export async function getProductForSearch({
     .lean()
   return JSON.parse(JSON.stringify(products)) as IProduct[]
 }
+// export async function getAllProducts({
+//   query,
+//   limit,
+//   page,
+//   category,
+//   tag,
+//   price,
+//   rating,
+//   sort,
+// }: {
+//   query: string
+//   category: string
+//   tag: string
+//   limit?: number
+//   page: number
+//   price?: number
+//   rating?: string
+//   sort?: string
+// }) {
+//   const {
+//     common: { pageSize },
+//   } = await getSetting()
+//   limit = limit || pageSize || 5
+//   await connectToDatabase()
+
+//   const queryFilter = QueryFilter(query)
+//   // const queryFilter =
+//   //   query && query !== 'all'
+//   //     ? {
+//   //         name: {
+//   //           $regex: query,
+//   //           $options: 'i',
+//   //         },
+//   //       }
+//   //     : {}
+//   const categoryFilter = CategoryFilter(category)
+//   // const categoryFilter = category && category !== 'all' ? { category } : {}
+//   const tagFilter = TagFilter(tag)
+//   // const tagFilter = tag && tag !== 'all' ? { tags: tag } : {}
+//   const ratingFilter = RatingFilter(rating)
+//   // const ratingFilter =
+//   //   rating && rating !== 'all'
+//   //     ? {
+//   //         avgRating: {
+//   //           $gte: Number(rating),
+//   //         },
+//   //       }
+//   //     : {}
+//   // 10-50
+//   const priceFilter = PriceFilter(String(price))
+//   // const priceFilter =
+//   //   price && price !== 'all'
+//   //     ? {
+//   //         price: {
+//   //           $gte: Number(price.split('-')[0]),
+//   //           $lte: Number(price.split('-')[1]),
+//   //         },
+//   //       }
+//   //     : {}
+//   const order = await SortingOrder(sort)
+//   // const order: Record<string, 1 | -1> =
+//   //   sort === 'best-selling'
+//   //     ? { numSales: -1 }
+//   //     : sort === 'price-low-to-high'
+//   //       ? { price: 1 }
+//   //       : sort === 'price-high-to-low'
+//   //         ? { price: -1 }
+//   //         : sort === 'avg-customer-review'
+//   //           ? { avgRating: -1 }
+//   //           : { _id: -1 }
+//   const isPublished = IsPublished()
+//   // const isPublished = { isPublished: true }
+//   const products = await Product.find({
+//     ...isPublished,
+//     ...queryFilter,
+//     ...tagFilter,
+//     ...categoryFilter,
+//     ...priceFilter,
+//     ...ratingFilter,
+//   })
+//     .sort(order)
+//     .skip(limit * (Number(page) - 1))
+//     .limit(limit)
+//     .lean()
+
+//   const countProducts = await Product.countDocuments({
+//     ...queryFilter,
+//     ...tagFilter,
+//     ...categoryFilter,
+//     ...priceFilter,
+//     ...ratingFilter,
+//   })
+//   return {
+//     products: JSON.parse(JSON.stringify(products)) as IProduct[],
+//     totalPages: Math.ceil(countProducts / limit),
+//     totalProducts: countProducts,
+//     from: limit * (Number(page) - 1) + 1,
+//     to: limit * (Number(page) - 1) + products.length,
+//   }
+// }
 export async function getAllProducts({
   query,
   limit,
@@ -360,79 +460,101 @@ export async function getAllProducts({
   limit = limit || pageSize || 5
   await connectToDatabase()
 
-  const queryFilter = QueryFilter(query)
-  // const queryFilter =
-  //   query && query !== 'all'
-  //     ? {
-  //         name: {
-  //           $regex: query,
-  //           $options: 'i',
-  //         },
-  //       }
-  //     : {}
-  const categoryFilter = CategoryFilter(category)
-  // const categoryFilter = category && category !== 'all' ? { category } : {}
-  const tagFilter = TagFilter(tag)
-  // const tagFilter = tag && tag !== 'all' ? { tags: tag } : {}
-  const ratingFilter = RatingFilter(rating)
-  // const ratingFilter =
-  //   rating && rating !== 'all'
-  //     ? {
-  //         avgRating: {
-  //           $gte: Number(rating),
-  //         },
-  //       }
-  //     : {}
-  // 10-50
-  const priceFilter = PriceFilter(price)
-  // const priceFilter =
-  //   price && price !== 'all'
-  //     ? {
-  //         price: {
-  //           $gte: Number(price.split('-')[0]),
-  //           $lte: Number(price.split('-')[1]),
-  //         },
-  //       }
-  //     : {}
-  const order = await SortingOrder(sort)
-  // const order: Record<string, 1 | -1> =
-  //   sort === 'best-selling'
-  //     ? { numSales: -1 }
-  //     : sort === 'price-low-to-high'
-  //       ? { price: 1 }
-  //       : sort === 'price-high-to-low'
-  //         ? { price: -1 }
-  //         : sort === 'avg-customer-review'
-  //           ? { avgRating: -1 }
-  //           : { _id: -1 }
-  const isPublished = IsPublished()
-  // const isPublished = { isPublished: true }
-  const products = await Product.find({
-    ...isPublished,
-    ...queryFilter,
-    ...tagFilter,
-    ...categoryFilter,
-    ...priceFilter,
-    ...ratingFilter,
-  })
-    .sort(order)
-    .skip(limit * (Number(page) - 1))
-    .limit(limit)
-    .lean()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const matchStage: any = {
+    isPublished: true,
+  }
 
-  const countProducts = await Product.countDocuments({
-    ...queryFilter,
-    ...tagFilter,
-    ...categoryFilter,
-    ...priceFilter,
-    ...ratingFilter,
-  })
+  if (category && category !== 'all') matchStage.category = category
+  if (tag && tag !== 'all') matchStage.tags = tag
+  if (rating && rating !== 'all')
+    matchStage.avgRating = { $gte: Number(rating) }
+  if (price && price !== 'all') {
+    const [min, max] = price.split('-').map(Number)
+    matchStage.price = { $gte: min, $lte: max }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sortStage: any =
+    sort === 'best-selling'
+      ? { numSales: -1 }
+      : sort === 'price-low-to-high'
+        ? { price: 1 }
+        : sort === 'price-high-to-low'
+          ? { price: -1 }
+          : sort === 'avg-customer-review'
+            ? { avgRating: -1 }
+            : { _id: -1 }
+
+  const searchStage =
+    query && query !== 'all'
+      ? [
+          {
+            $search: {
+              index: 'productsSearch', // name of your Atlas Search index
+              compound: {
+                must: [
+                  {
+                    text: {
+                      query,
+                      path: 'name',
+                      fuzzy: {
+                        maxEdits: 2,
+                        prefixLength: 1,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ]
+      : []
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pipeline: any[] = [
+    ...searchStage,
+    { $match: matchStage },
+    { $sort: sortStage },
+    { $skip: limit * (page - 1) },
+    { $limit: limit },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        slug: 1,
+        images: 1,
+        tags: 1,
+        price: 1,
+        avgRating: 1,
+        numSales: 1,
+        sizes: 1,
+        colors: 1,
+        numReviews: 1,
+      },
+    },
+  ]
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const countPipeline: any[] = [
+    ...searchStage,
+    { $match: matchStage },
+    { $count: 'total' },
+  ]
+
+  const [products, countResult] = await Promise.all([
+    Product.aggregate(pipeline),
+    Product.aggregate(countPipeline),
+  ])
+
+  const countProducts = countResult[0]?.total || 0
+
   return {
-    products: JSON.parse(JSON.stringify(products)) as IProduct[],
+    products: JSON.parse(JSON.stringify(products)),
     totalPages: Math.ceil(countProducts / limit),
     totalProducts: countProducts,
-    from: limit * (Number(page) - 1) + 1,
-    to: limit * (Number(page) - 1) + products.length,
+    from: limit * (page - 1) + 1,
+    to: limit * (page - 1) + products.length,
   }
 }
 
