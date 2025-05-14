@@ -289,6 +289,66 @@ const ProductUpdateForm = ({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name='colors'
+            render={({ field }) => (
+              <FormItem className='w-full'>
+                <FormLabel>Colors</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Enter colors'
+                    value={
+                      Array.isArray(field.value) ? field.value.join(', ') : ''
+                    }
+                    onChange={(e) => {
+                      const raw = e.target.value
+                      const lastChar = raw[raw.length - 1]
+                      const isEndingInComma = lastChar === ','
+                      const sizeArray = raw
+                        .split(',')
+                        .map((s) => s.trim())
+                        .filter((s) => s.length > 0)
+                      field.onChange(
+                        isEndingInComma ? [...sizeArray, ''] : sizeArray
+                      )
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='sizes'
+            render={({ field }) => (
+              <FormItem className='w-full'>
+                <FormLabel>Sizes</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Enter sizes or type'
+                    value={
+                      Array.isArray(field.value) ? field.value.join(', ') : ''
+                    }
+                    onChange={(e) => {
+                      const raw = e.target.value
+                      const lastChar = raw[raw.length - 1]
+                      const isEndingInComma = lastChar === ','
+                      const sizeArray = raw
+                        .split(',')
+                        .map((s) => s.trim())
+                        .filter((s) => s.length > 0)
+                      field.onChange(
+                        isEndingInComma ? [...sizeArray, ''] : sizeArray
+                      )
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <div className='flex flex-col gap-5 md:flex-row'>
