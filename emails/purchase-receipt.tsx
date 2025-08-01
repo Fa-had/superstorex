@@ -55,7 +55,7 @@ PurchaseReceiptEmail.PreviewProps = {
         countInStock: 10,
       },
     ],
-    paymentMethod: 'Bikash',
+    paymentMethod: 'Bkash',
     expectedDeliveryDate: new Date(),
     isDelivered: true,
   } as IOrder,

@@ -18,7 +18,12 @@ import { cn, formatDateTime } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import ProductPrice from '../product/product-price'
 import ActionButton from '../action-Button'
-import { deliverOrder, updateOrderToPaid } from '@/lib/actions/order.actions'
+import {
+  deliverOrder,
+  updateOrderToPaid,
+  // generateInvoice,
+} from '@/lib/actions/order.actions'
+import DownloadInvoice from '../LazyPDFButton'
 
 export default function OrderDetailsForm({
   order,
@@ -155,6 +160,7 @@ export default function OrderDetailsForm({
                 Pay Order
               </Link>
             )}
+            {isAdmin && <DownloadInvoice order={order} />}
 
             {isAdmin && !isPaid && paymentMethod === 'Cash On Delivery' && (
               <ActionButton

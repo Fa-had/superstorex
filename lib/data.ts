@@ -344,7 +344,7 @@ const users: IUserInput[] = [
       postalCode: '1001',
       phone: '123-456-7890',
     },
-    paymentMethod: 'Bikash',
+    paymentMethod: 'Bkash',
     emailVerified: false,
   },
   {

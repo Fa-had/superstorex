@@ -14,6 +14,7 @@ import Product from '../db/models/product.model'
 import User from '../db/models/user.model'
 import { revalidatePath } from 'next/cache'
 import mongoose from 'mongoose'
+// import { pdfGenerator } from '@/components/shared/pdf-generator'
 
 //Bkash creadential
 const bkashConfig = {
@@ -22,6 +23,32 @@ const bkashConfig = {
   password: process.env.BKASH_PASSWORD,
   app_key: process.env.BKASH_API_KEY,
   app_secret: process.env.BKASH_SECRET_KEY,
+}
+//Generate Invoice PDF
+export async function generateInvoice(orderId: string) {
+  try {
+    await connectToDatabase()
+    const order = await Order.findById(orderId).populate<{
+      user: { email: string; name: string }
+    }>('user', 'name email')
+    if (!order) throw new Error('Order not found')
+    // await pdfGenerator({ order })
+    // const blob = new Blob(
+    //   [Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))],
+    //   {
+    //     type: 'application/pdf',
+    //   }
+    // )
+    // const url = URL.createObjectURL(blob)
+    // const link = document.createElement('a')
+    // link.href = url
+    // link.download = 'invoice.pdf'
+    // link.click()
+    // URL.revokeObjectURL(url)
+    return { success: true, message: 'Order invoice generated successfully' }
+  } catch (err) {
+    return { success: false, message: formatError(err) }
+  }
 }
 
 // CREATE
