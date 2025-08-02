@@ -282,6 +282,9 @@ const CheckoutForm = () => {
                   >
                     <Card className='md:ml-8 my-4'>
                       <CardContent className='p-4 space-y-2'>
+                        <div className='text-red-500 text-sm'>
+                          Only Dhaka City
+                        </div>
                         <div className='text-lg font-bold mb-2'>
                           {t('Checkout.Your address')}
                         </div>
