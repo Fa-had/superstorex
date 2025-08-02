@@ -79,22 +79,26 @@ const ProductCard = ({
   const AddButton = () => (
     <div className='w-full text-center'>
       {/* Comment out when finished developing */}
-      <AddToCart
-        minimal
-        item={{
-          clientId: generateId(),
-          product: product._id,
-          size: product.sizes[0],
-          color: product.colors[0],
-          countInStock: product.countInStock,
-          name: product.name,
-          slug: product.slug,
-          category: product.category,
-          price: round2(product.price),
-          quantity: 1,
-          image: product.images[0],
-        }}
-      />
+      {product.countInStock === 0 ? (
+        <div className='text-red-500'>Out of Stock</div>
+      ) : (
+        <AddToCart
+          minimal
+          item={{
+            clientId: generateId(),
+            product: product._id,
+            size: product.sizes[0],
+            color: product.colors[0],
+            countInStock: product.countInStock,
+            name: product.name,
+            slug: product.slug,
+            category: product.category,
+            price: round2(product.price),
+            quantity: 1,
+            image: product.images[0],
+          }}
+        />
+      )}
     </div>
   )
 

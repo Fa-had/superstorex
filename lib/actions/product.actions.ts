@@ -524,6 +524,7 @@ export async function getAllProducts({
         name: 1,
         slug: 1,
         images: 1,
+        countInStock: 1,
         tags: 1,
         price: 1,
         avgRating: 1,
