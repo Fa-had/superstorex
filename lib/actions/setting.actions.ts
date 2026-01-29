@@ -31,7 +31,6 @@ export const getCarouselsFromSettings = async () => {
 
 export const getSetting = async (): Promise<ISettingInput> => {
   if (!globalForSettings.cachedSettings) {
-    console.log('hit db')
     await connectToDatabase()
     const setting = await Setting.findOne().lean()
     globalForSettings.cachedSettings = setting
@@ -49,7 +48,7 @@ export const updateSetting = async (newSetting: ISettingInput) => {
       new: true,
     }).lean()
     globalForSettings.cachedSettings = JSON.parse(
-      JSON.stringify(updatedSetting)
+      JSON.stringify(updatedSetting),
     ) // Update the cache
     return {
       success: true,

@@ -49,7 +49,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (user && user.password) {
           const isMatch = await bcrypt.compare(
             credentials.password as string,
-            user.password
+            user.password,
           )
           if (isMatch) {
             return {
@@ -67,23 +67,29 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     jwt: async ({ token, user, trigger, session }) => {
       if (user) {
+        const name = user.name ?? user.email?.split('@')[0] ?? 'User'
+
+        token.name = name
+        token.role = (user as { role?: string }).role ?? 'user'
+
+        // Optional: only update DB if name is missing
         if (!user.name) {
           await connectToDatabase()
           await User.findByIdAndUpdate(user.id, {
-            name: user.name || user.email!.split('@')[0],
-            role: 'user',
+            name,
           })
         }
-        token.name = user.name || user.email!.split('@')[0]
-        token.role = (user as { role: string }).role
       }
 
-      if (session?.user?.name && trigger === 'update') {
+      if (trigger === 'update' && session?.user?.name) {
         token.name = session.user.name
       }
+
       return token
     },
     session: async ({ session, user, trigger, token }) => {
+      if (!session.user) return session
+
       session.user.id = token.sub as string
       session.user.role = token.role as string
       session.user.name = token.name

@@ -29,11 +29,7 @@ const SettingForm = ({ setting }: { setting: ISettingInput }) => {
   } = form
 
   async function onSubmit(values: ISettingInput) {
-    console.log('On submit')
-
     const res = await updateSetting({ ...values })
-    console.log('Res: ', res)
-
     if (!res.success) {
       toast.error(res.message)
     } else {

@@ -41,7 +41,7 @@ export default async function Sidebar({
                   <DrawerClose asChild>
                     <Link href='/account'>
                       <span className='text-lg font-semibold'>
-                        {t('Header.Hello')}, {session.user.name}
+                        {t('Header.Hello')}, {session?.user?.name}
                       </span>
                     </Link>
                   </DrawerClose>

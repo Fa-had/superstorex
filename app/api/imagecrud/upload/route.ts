@@ -3,11 +3,11 @@ import { google } from 'googleapis'
 import { credentials } from '@/lib/utils'
 import { Readable } from 'stream'
 
-export const config = {
-  api: {
-    bodyParser: false, // Disable default body parser
-  },
-}
+// export const config = {
+//   api: {
+//     bodyParser: false, // Disable default body parser
+//   },
+// }
 
 const driveFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID! // You need to set this in .env
 

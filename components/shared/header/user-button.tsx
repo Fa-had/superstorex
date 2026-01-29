@@ -26,7 +26,7 @@ export default async function UserButton() {
             <div className='flex flex-col text-xs text-left'>
               <span>
                 {t('Header.Hello')},{' '}
-                {session ? session.user.name : t('Header.sign in')}
+                {session ? session.user?.name : t('Header.sign in')}
               </span>
               <span className='font-bold'>{t('Header.Account & Orders')}</span>
             </div>
@@ -38,10 +38,10 @@ export default async function UserButton() {
             <DropdownMenuLabel className='font-normal'>
               <div className='flex flex-col space-y-1'>
                 <p className='text-sm font-medium leading-none'>
-                  {session.user.name}
+                  {session.user?.name}
                 </p>
                 <p className='text-xs leading-none text-muted-foreground'>
-                  {session.user.email}
+                  {session.user?.email}
                 </p>
               </div>
             </DropdownMenuLabel>

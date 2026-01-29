@@ -36,7 +36,7 @@ export default async function RootLayout({
   children,
   params,
 }: Readonly<{
-  params: { locale: string }
+  params: Promise<{ locale: string }>
   children: React.ReactNode
 }>) {
   const setting = await getSetting()
