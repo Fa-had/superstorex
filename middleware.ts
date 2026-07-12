@@ -17,7 +17,8 @@ const publicPages = [
 const intlMiddleware = createMiddleware(routing)
 const { auth } = NextAuth(authConfig)
 
-export default auth((req) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default auth((req: any) => {
   const publicPathnameRegex = RegExp(
     `^(/(${routing.locales.join('|')}))?(${publicPages
       .flatMap((p) => (p === '/' ? ['', '/'] : p))

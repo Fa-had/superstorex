@@ -45,7 +45,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (credentials == null) return null
 
         const user = await User.findOne({ email: credentials.email })
-
         if (user && user.password) {
           const isMatch = await bcrypt.compare(
             credentials.password as string,
